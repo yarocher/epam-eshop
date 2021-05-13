@@ -1,5 +1,9 @@
 package com.eshop.model.db;
 
+import java.util.List;
+
+import com.eshop.model.entity.products.*;
+
 public class ProductsDAO {
 	public void insertProduct (Product product) {
 
@@ -27,7 +31,7 @@ public class ProductsDAO {
 
 		return null;
 	}
-	public Lits <Product> getCategoryProducts (Category category) {
+	public List <Product> getCategoryProducts (Category category) {
 
 		return null;
 	}
@@ -39,11 +43,11 @@ public class ProductsDAO {
 
 		return null;
 	}
-	public Product getCategoryById (long id) {
+	public Product getProductById (long id) {
 
 		return null;
 	}
-	public Product getCategoryByPattern (Product pattern) {
+	public Product getProductByPattern (Product pattern) {
 
 		return null;
 	}
