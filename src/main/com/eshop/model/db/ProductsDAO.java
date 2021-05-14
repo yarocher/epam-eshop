@@ -1,10 +1,32 @@
 package com.eshop.model.db;
 
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import java.util.List;
 
 import com.eshop.model.entity.products.*;
 
 public class ProductsDAO {
+	private String url = "";
+
+	public ProductsDAO (String url) {
+		this.url = url;
+	}
+
+	public Connection getConnection (String url) throws DBException {
+		try {
+			return DriverManager.getConnection(url);
+		}
+		catch (SQLException sqle) {
+			throw new DBException ("Can't get connection to " + url, sqle);
+		}
+	}
+
 	public void insertProduct (Product product) {
 
 	}
