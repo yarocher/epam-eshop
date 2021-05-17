@@ -13,11 +13,11 @@ public class Product {
 	private double price;
 	private Date dateCreation;
 	private Date dateModified;
-	private ProductState state;
+	private String state;
 
 	public long getId () {return id;};
 	public String getName () {return name;};
-	public Map <String, String> getAttributes () {
+	public Map <String, String> attributes () {
 		if (attributes == null) attributes = new HashMap <> ();
 		return attributes;
 	};
@@ -26,7 +26,7 @@ public class Product {
 	public double getPrice () {return price;};
 	public Date getDateCreation () {return dateCreation;};
 	public Date getDateModified () {return dateModified;};
-	public ProductState getState () {return state;}
+	public String getState () {return state;}
 
 	public void setId (long id) {this.id = id;}
 	public void setName (String name) {this.name = name;}
@@ -35,7 +35,7 @@ public class Product {
 	public void setPrice (double price) {this.price = price;}
 	public void setDateCreation (Date date) {this.dateCreation = date;}
 	public void setDateModified (Date date) {this.dateModified = date;}
-	public void setState (ProductState state) {this.state = state;}
+	public void setState (String state) {this.state = state;}
 
 	public Product () {}
 	public Product (String name, double price, int amount) {
@@ -46,7 +46,23 @@ public class Product {
 
 	@Override
 	public String toString () {
+		//return fullToString();
 		return "Product" + id + " {name=" + name + ", price=" + String.format("%.2f", price) + ", amount=" + amount + ", state=" + state +  "}";
+	}
+
+	public String fullToString () {
+		StringBuilder sb = new StringBuilder (name + id +  ":\n");
+		sb.append("\tattributes:\n");
+		for (Map.Entry <String, String> entry: attributes().entrySet()) {
+			sb.append("\t\t" + entry.getKey() + ": " + entry.getValue()+ "\n");
+		}
+		sb.append("\t" + description + "\n");
+		sb.append("\tprice: " + price + "\n");
+		sb.append("\tamount: " + amount + "\n");
+		sb.append("\tdate of creation: " + dateCreation + "\n");
+		sb.append("\tdate of modifiyng: " + dateModified + "\n");
+		sb.append("\tstate: " + state + "\n");
+		return sb.toString(); 
 	}
 
 }

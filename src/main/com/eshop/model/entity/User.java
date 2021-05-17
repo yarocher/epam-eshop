@@ -7,7 +7,7 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private UserState state;
+	private String state;
 
 	public long getId () {return id;}
 	public String getLogin () {return login;}
@@ -15,7 +15,7 @@ public class User {
 	public String getFirstName () {return firstName;}
 	public String getLastName () {return lastName;}
 	public String getEmail () {return email;}
-	public UserState getState () {return state;}
+	public String getState () {return state;}
 
 	public void setId (long id) {this.id = id;}
 	public void setLogin (String login) {this.login = login;}
@@ -23,7 +23,7 @@ public class User {
 	public void setFirstName (String firstName) {this.firstName = firstName;}
 	public void setLastName (String lastName) {this.lastName = lastName;}
 	public void setEmail (String email) {this.email = email;}
-	public void setState (UserState state) {this.state = state;}
+	public void setState (String state) {this.state = state;}
 
 	public User () {}
 	public User (String login, String password) {
