@@ -13,6 +13,10 @@ public class EntityFactory {
 		return new Key (name);
 	}
 
+	public Value newValue (String name) {
+		return new Value (name);
+	}
+
 	public Category newCategory (String name) {
 		return new Category (name);
 	}

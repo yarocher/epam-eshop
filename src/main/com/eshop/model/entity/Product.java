@@ -7,7 +7,7 @@ import java.util.Date;
 public class Product {
 	private long id;
 	private String name;
-	private Map <String, String> attributes;
+	private Map <Key, Value> attributes;
 	private String description;
 	private int amount;
 	private double price;
@@ -17,7 +17,7 @@ public class Product {
 
 	public long getId () {return id;};
 	public String getName () {return name;};
-	public Map <String, String> attributes () {
+	public Map <Key, Value> attributes () {
 		if (attributes == null) attributes = new HashMap <> ();
 		return attributes;
 	};
@@ -53,8 +53,8 @@ public class Product {
 	public String fullToString () {
 		StringBuilder sb = new StringBuilder (name + id +  ":\n");
 		sb.append("\tattributes:\n");
-		for (Map.Entry <String, String> entry: attributes().entrySet()) {
-			sb.append("\t\t" + entry.getKey() + ": " + entry.getValue()+ "\n");
+		for (Map.Entry <Key, Value> entry: attributes().entrySet()) {
+			sb.append("\t\t" + entry.getKey().getName() + ": " + entry.getValue().getName() + "\n");
 		}
 		sb.append("\t" + description + "\n");
 		sb.append("\tprice: " + price + "\n");
