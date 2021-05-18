@@ -14,14 +14,21 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.eshop.model.entity.*;
+import com.eshop.model.ProductPatternBuilder;
 
 public class ProductsDAOMySQL implements ProductsDAO {
-	private String URL = "jdbc:mysql://localhost:3306/mydb?user=login&password=password";
+	private String url = "jdbc:mysql://localhost:3306/mydb?user=login&password=password";
 	private EntityFactory ef = EntityFactory.getInstance();
 
-	private Connection getConnection () throws DBException {
+	@Override
+	public void setURL (String url) {
+		this.url = url;
+	}
+
+	@Override
+	public Connection getConnection () throws DBException {
 		try {
-			return DriverManager.getConnection(URL); 
+			return DriverManager.getConnection(url); 
 		}
 		catch (SQLException sqle) {
 			throw new DBException ("Something went wrong while trying to get connection...", sqle);
@@ -29,12 +36,44 @@ public class ProductsDAOMySQL implements ProductsDAO {
 	}	
 
 	@Override
+	public List <Product> getProductsByPattern (ProductPatternBuilder pattern) throws DBException {
+		String sql = pattern.get();
+
+		Connection conn = getConnection ();
+		QueryExecutor <List<Product>> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			List <Product> products = new ArrayList <> ();
+			int k = 0;
+			if (pattern.name() != null) stmt.setString(++k, pattern.name());
+			if (pattern.priceMax() != -1) stmt.setString(++k, Double.toString(pattern.priceMax()));
+			if (pattern.priceMin() != -1) stmt.setString(++k, Double.toString(pattern.priceMin()));
+			for (Map.Entry <String, String> entry: pattern.attributes().entrySet()) {
+				stmt.setString(++k, entry.getKey());
+				stmt.setString(++k, entry.getValue());
+			}
+			System.out.println(stmt);
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				long id = rs.getLong("id");
+				Product p = getProductById(id);
+				products.add(p);
+			}	
+			return products;
+		});
+		qe.setErrorMessage("Something went wrong while trying to get products by pattern...");
+		List <Product> products = qe.execute(conn, sql, false);
+		qe.close(conn);
+		return products;
+	}
+
+	@Override
 	public List <Product> getAllProducts () throws DBException {
 		Connection conn = getConnection ();
 		QueryExecutor <List<Product>> qe = new QueryExecutor <> ();
 		qe.setQuery((stmt, rs) -> {
 			List <Product> products = new ArrayList <> ();
-			rs = stmt.executeQuery(MySQLQueries.GET_ALL_PRODUCTS);
+			rs = stmt.executeQuery();
 
 			while (rs.next()) {
 				Product product = parseProduct(conn, rs);
@@ -54,7 +93,7 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		QueryExecutor <List <Category>> qe = new QueryExecutor<> ();
 		qe.setQuery((stmt, rs) -> {
 			List <Category> categories = new ArrayList <> ();
-			rs = stmt.executeQuery(MySQLQueries.GET_ALL_CATEGORIES);
+			rs = stmt.executeQuery();
 			while (rs.next()) {
 				Category category = parseCategory(conn, rs);
 				categories.add(category);
@@ -228,7 +267,15 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		qe.setQuery((stmt, rs) -> {
 			stmt.setString(1, Long.toString(key.getId()));
 			stmt.setString(2, Long.toString(value.getId()));
-			return stmt.execute();
+			boolean res = false;
+			try {
+				res = stmt.execute();
+			}
+			catch (SQLException sqle) {
+				int code = sqle.getErrorCode();
+				if (code != 23505 && code != 1062) throw sqle;
+			}
+			return res; 
 		});
 		qe.setErrorMessage("Something went wrong while trying to add value to key...");
 		return qe.execute(conn, MySQLQueries.ADD_VALUE_TO_KEY, false).booleanValue();
@@ -272,12 +319,12 @@ public class ProductsDAOMySQL implements ProductsDAO {
 			if (res) { 
 				category.setId(rs.getLong(1));
 				for (Key key: category.keys()) {
-					insertKey(conn, key);
-					for (Value value: key.values()) {
-						insertValue(conn, value);
-						addValueToKey(conn, value, key);
-					}
-					addKeyToCategory(conn, key, category);
+						insertKey(conn, key);
+						for (Value value: key.values()) {
+							insertValue(conn, value);
+							addValueToKey(conn, value, key);
+						}
+						addKeyToCategory(conn, key, category);
 				}
 			}
 			return res;
@@ -323,7 +370,13 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
 		qe.setQuery((stmt, rs) -> {
 			stmt.setString(1, value.getName());
-			stmt.execute();
+			try {
+				stmt.execute();
+			}
+			catch (SQLException sqle) {
+				int code = sqle.getErrorCode();
+				if (code != 23505 && code != 1062) throw sqle;
+			}
 			rs = stmt.getGeneratedKeys();
 			boolean res = rs.next();
 			if (res) { 
@@ -340,7 +393,13 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
 		qe.setQuery((stmt, rs) -> {
 			stmt.setString(1, key.getName());
-			stmt.execute();
+			try {
+				stmt.execute();
+			}
+			catch (SQLException sqle) {
+				int code = sqle.getErrorCode();
+				if (code != 23505 && code != 1062) throw sqle;
+			}
 			rs = stmt.getGeneratedKeys();
 			boolean res = rs.next();
 			if (res) { 
@@ -378,7 +437,8 @@ public class ProductsDAOMySQL implements ProductsDAO {
 				else stmt.setNull(2, Types.VARCHAR); 
 			stmt.setString(3, Double.toString(product.getPrice()));
 			stmt.setString(4, Integer.toString(product.getAmount()));
-			stmt.setString(5, Long.toString(product.getId()));
+			stmt.setString(5, product.getState());
+			stmt.setString(6, Long.toString(product.getId()));
 			return stmt.execute();
 		});
 		qe.setErrorMessage("Something went wrong while trying to update product...");

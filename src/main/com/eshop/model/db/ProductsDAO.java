@@ -5,8 +5,10 @@ import java.sql.Connection;
 import java.util.List;
 
 import com.eshop.model.entity.*;
+import com.eshop.model.ProductPatternBuilder;
 
-public interface ProductsDAO {
+public interface ProductsDAO extends DAO{
+	List <Product> getProductsByPattern (ProductPatternBuilder pattern) throws DBException;
 	List <Product> getAllProducts () throws DBException;
 	List <Category> getAllCategories () throws DBException;
 	Product getProductById (long id) throws DBException;

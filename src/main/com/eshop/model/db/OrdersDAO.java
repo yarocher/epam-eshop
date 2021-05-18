@@ -1,5 +1,5 @@
 package com.eshop.model.db;
 
-public interface OrdersDAO {
+public interface OrdersDAO /*extends DAO*/ {
 
 }

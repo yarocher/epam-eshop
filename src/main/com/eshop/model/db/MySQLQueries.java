@@ -36,9 +36,25 @@ public class MySQLQueries {
 	public static final String INSERT_ATTRIBUTE = "INSERT INTO attribute (product_id, category_id, key_id, value_id) VALUES (?, ?, ?, ?);";
 
 	public static final String UPDATE_CATEGORY = "UPDATE category SET name = ? WHERE id = ?;";
-	public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, description = ?, price = ?, amount = ? WHERE id = ?;";
+	public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, description = ?, price = ?, amount = ?, state = ? WHERE id = ?;";
 
 	public static final String DELETE_CATEGORY = "DELETE FROM category WHERE id = ?;";
 	public static final String DELETE_PRODUCT = "DELETE FROM product WHERE id = ?;";
+
+	public static final String NAME_FILTER = " product.name = ?";
+	public static final String PRICE_MAX_FILTER = " price <= ? ";
+	public static final String PRICE_MIN_FILTER = " price >= ? ";
+	public static final String ATTRIBUTE_FILTER = " attribute_key.name = ? AND attribute_value.name = ?";
+
+	public static final String PRODUCT_PATTERN = "SELECT DISTINCT product.id FROM product " +
+		"INNER JOIN attribute " +
+		"ON attribute.product_id = product.id " +
+		"INNER JOIN attribute_key " +
+		"ON attribute.key_id = attribute_key.id " +
+		"INNER JOIN attribute_value " +
+		"ON attribute.value_id = attribute_value.id ";
+
+	public static final String FILTER = " WHERE ";
+	public static final String AND = " AND ";
 
 }
