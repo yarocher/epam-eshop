@@ -293,7 +293,13 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		Connection conn = getConnection();
 		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
 		qe.setQuery((stmt, rs) -> {
-			setProduct(stmt, product, category);
+			stmt.setString(1, product.getName());
+			String description = product.getDescription();
+				if (description != null) stmt.setString(2, description);
+				else stmt.setNull(2, Types.VARCHAR); 
+			stmt.setString(3, Double.toString(product.getPrice()));
+			stmt.setString(4, Integer.toString(product.getAmount()));
+			stmt.setString(5, Long.toString(category.getId()));
 			stmt.execute();
 			rs = stmt.getGeneratedKeys();
 			boolean res = rs.next();
@@ -346,6 +352,69 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		return qe.execute(conn, MySQLQueries.INSERT_KEY, true).booleanValue();
 	}
 
+	@Override
+	public boolean updateCategory (Category category) throws DBException{
+		Connection conn = getConnection ();
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, category.getName());	
+			stmt.setString(2, Long.toString(category.getId()));	
+			return stmt.execute();
+		});
+		qe.setErrorMessage("Something went wrong while trying to update category...");
+		boolean res = qe.execute(conn, MySQLQueries.UPDATE_CATEGORY, false);
+		qe.close(conn);
+		return res;
+	}
+
+	@Override
+	public boolean updateProduct (Product product) throws DBException{
+		Connection conn = getConnection ();
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, product.getName());
+			String description = product.getDescription();
+				if (description != null) stmt.setString(2, description);
+				else stmt.setNull(2, Types.VARCHAR); 
+			stmt.setString(3, Double.toString(product.getPrice()));
+			stmt.setString(4, Integer.toString(product.getAmount()));
+			stmt.setString(5, Long.toString(product.getId()));
+			return stmt.execute();
+		});
+		qe.setErrorMessage("Something went wrong while trying to update product...");
+		boolean res = qe.execute(conn, MySQLQueries.UPDATE_PRODUCT, false);
+		qe.close(conn);
+		return res;
+	}
+
+	@Override
+	public boolean deleteCategory (Category category) throws DBException{
+		Connection conn = getConnection ();
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, Long.toString(category.getId()));	
+			return stmt.execute();
+		});
+		qe.setErrorMessage("Something went wrong while trying to delete category...");
+		boolean res = qe.execute(conn, MySQLQueries.DELETE_CATEGORY, false);
+		qe.close(conn);
+		return res;
+	}
+
+	@Override
+	public boolean deleteProduct (Product product) throws DBException{
+		Connection conn = getConnection ();
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, Long.toString(product.getId()));
+			return stmt.execute();
+		});
+		qe.setErrorMessage("Something went wrong while trying to delete product...");
+		boolean res = qe.execute(conn, MySQLQueries.DELETE_PRODUCT, false);
+		qe.close(conn);
+		return res;
+	}
+
 
 	private Product parseProduct (Connection conn, ResultSet rs) throws SQLException, DBException  {
 		Product product = ef.newProduct(rs.getString("name"), rs.getDouble("price"), rs.getInt("amount")); 
@@ -374,15 +443,5 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		List <Value> values = getKeyValues (conn, key);
 		key.values().addAll(values);
 		return key;
-	}
-
-	private void setProduct (PreparedStatement stmt, Product product, Category category) throws SQLException {
-		stmt.setString(1, product.getName());
-		String description = product.getDescription();
-			if (description != null) stmt.setString(2, description);
-			else stmt.setNull(2, Types.VARCHAR); 
-		stmt.setString(3, Double.toString(product.getPrice()));
-		stmt.setString(4, Integer.toString(product.getAmount()));
-		stmt.setString(5, Long.toString(category.getId()));
 	}
 }

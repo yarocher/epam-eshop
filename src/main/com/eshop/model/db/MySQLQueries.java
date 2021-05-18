@@ -7,8 +7,7 @@ public class MySQLQueries {
 	public static final String GET_CATEGORY_BY_ID = "SELECT * FROM category  WHERE id = ?;";
 	public static final String GET_CATEGORY_PRODUCTS = "SELECT * FROM product WHERE category_id = ?;";
 	public static final String GET_PRODUCT_ATTRIBUTES = "SELECT attribute_key.id AS key_id, attribute_key.name AS `key`, attribute_value.id AS value_id, attribute_value.name AS value " +
-		"FROM attribute " +
-	       	"INNER JOIN attribute_key " + 
+		"FROM attribute " + "INNER JOIN attribute_key " + 
 		"ON attribute.key_id = attribute_key.id " +
 	       	"INNER JOIN attribute_value " + 
 		"ON attribute.value_id = attribute_value.id " + 
@@ -35,5 +34,11 @@ public class MySQLQueries {
 
 	public static final String INSERT_PRODUCT = "INSERT INTO product (name, description, price, amount, category_id) VALUES (?, ?, ?, ?, ?);";
 	public static final String INSERT_ATTRIBUTE = "INSERT INTO attribute (product_id, category_id, key_id, value_id) VALUES (?, ?, ?, ?);";
+
+	public static final String UPDATE_CATEGORY = "UPDATE category SET name = ? WHERE id = ?;";
+	public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, description = ?, price = ?, amount = ? WHERE id = ?;";
+
+	public static final String DELETE_CATEGORY = "DELETE FROM category WHERE id = ?;";
+	public static final String DELETE_PRODUCT = "DELETE FROM product WHERE id = ?;";
 
 }

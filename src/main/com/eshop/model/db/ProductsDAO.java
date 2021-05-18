@@ -14,4 +14,8 @@ public interface ProductsDAO {
 	List <Product> getCategoryProducts (Category category) throws DBException;
 	boolean insertCategory (Category category) throws DBException;
 	boolean insertProduct (Product product, Category category) throws DBException;
+	boolean updateCategory (Category category) throws DBException;
+	boolean updateProduct (Product product) throws DBException;
+	boolean deleteCategory (Category category) throws DBException;
+	boolean deleteProduct (Product product) throws DBException;
 }
