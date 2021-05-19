@@ -56,7 +56,7 @@ public class ProductsDAOMySQL implements ProductsDAO {
 
 			while (rs.next()) {
 				long id = rs.getLong("id");
-				Product p = getProductById(id);
+				Product p = getProductById(conn, id, false);
 				products.add(p);
 			}	
 			return products;
@@ -178,8 +178,7 @@ public class ProductsDAOMySQL implements ProductsDAO {
 	}
 
 	@Override
-	public Product getProductById (long id)  throws DBException {
-		Connection conn = getConnection ();
+	public Product getProductById (Connection conn, long id, boolean terminal)  throws DBException {
 		QueryExecutor <Product> qe = new QueryExecutor <> ();
 		qe.setQuery((stmt, rs) -> {
 			stmt.setString(1, Long.toString(id));
@@ -193,7 +192,7 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		});
 		qe.setErrorMessage("Something went wrong while trying to get product by id...");
 		Product product = qe.execute(conn, MySQLQueries.GET_PRODUCT_BY_ID, false);
-		qe.close(conn);
+		if (terminal) qe.close(conn);
 		return product;
 	}
 

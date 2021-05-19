@@ -73,8 +73,8 @@ public class ProductsDAOTest {
 
 	@Before
 	public void setDB () throws FileNotFoundException, DBException, SQLException {
-		RunScript.execute(dao.getConnection(), new FileReader ("sql/db-reset.sql"));
-		RunScript.execute(dao.getConnection(), new FileReader ("sql/db-fill-init.sql"));
+		RunScript.execute(dao.getConnection(), new FileReader ("sql/h2-reset.sql"));
+		RunScript.execute(dao.getConnection(), new FileReader ("sql/h2-fill-init.sql"));
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class ProductsDAOTest {
 	}
 	@Test
 	public void shouldGetProductById () throws DBException {
-		Product product = dao.getProductById(1);
+		Product product = dao.getProductById(dao.getConnection(), 1, true);
 		productTest.setDateCreation(product.getDateCreation());
 		productTest.setDateModified(product.getDateModified());
 		assertEquals(productTest, product);
@@ -142,7 +142,7 @@ public class ProductsDAOTest {
 		p.attributes().put(color, red);
 		dao.insertProduct(p, categoryTest);
 
-		Product inserted = dao.getProductById(p.getId());
+		Product inserted = dao.getProductById(dao.getConnection(), p.getId(), true);
 		p.setDateCreation(inserted.getDateCreation());
 		p.setDateModified(inserted.getDateCreation());
 
@@ -175,7 +175,7 @@ public class ProductsDAOTest {
 
 		dao.updateProduct(p);
 
-		Product updated = dao.getProductById(p.getId());
+		Product updated = dao.getProductById(dao.getConnection(), p.getId(), true);
 		p.setDateCreation(updated.getDateCreation());
 		p.setDateModified(updated.getDateCreation());
 

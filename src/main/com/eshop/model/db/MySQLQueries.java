@@ -57,4 +57,27 @@ public class MySQLQueries {
 	public static final String FILTER = " WHERE ";
 	public static final String AND = " AND ";
 
+	public static final String GET_ALL_USERS = "SELECT * FROM user";
+	public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
+	public static final String GET_USER_DATA = "SELECT * FROM user_data WHERE user_id = ?";
+	public static final String INSERT_USER = "INSERT INTO user (login, password) VALUES (?, ?)";
+	public static final String INSERT_USER_DATA = "INSERT INTO user_data (first_name, last_name, email, user_id) VALUES (?, ?, ?, ?)";
+	public static final String UPDATE_USER = "UPDATE user SET login = ?, password = ? WHERE id = ?";
+	public static final String UPDATE_USER_DATA  = "UPDATE user_data SET first_name = ?, last_name = ?, email = ? WHERE user_id = ?";
+	public static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
+
+	public static final String GET_CART_BY_ID = "SELECT * FROM cart WHERE id = ?";
+	public static final String GET_CART_PRODUCTS = "SELECT cart_product.product_id, cart_product.amount FROM cart_product WHERE cart_id = ?";
+	public static final String GET_CURRENT_USER_CART = "SELECT cart.id FROM cart LEFT JOIN `order` ON cart.id = `order`.cart_id WHERE cart.user_id = ? AND `order`.id IS NULL";
+	public static final String GET_ORDER_BY_ID = "SELECT * FROM `order` WHERE id = ?";
+	public static final String GET_ALL_ORDERS = "SELECT * FROM `order`";
+	public static final String GET_USER_ORDERS = "SELECT * FROM `order` WHERE user_id = ?";
+
+	public static final String INSERT_CART = "INSERT INTO cart (user_id) VALUES (?)";
+	public static final String DELETE_CART = "DELETE FROM cart WHERE id = ?";
+	public static final String INSERT_ORDER = "INSERT INTO `order` (cart_id, user_id) VALUES (?, ?)";
+	public static final String UPDATE_ORDER = "UPDATE `order` SET state = ? WHERE id = ?";
+	public static final String DELETE_ORDER = "DELETE FROM `order` WHERE id = ?";
+
+
 }
