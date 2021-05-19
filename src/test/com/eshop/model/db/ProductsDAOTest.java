@@ -22,7 +22,7 @@ import com.eshop.model.db.*;
 public class ProductsDAOTest {
 	private static ProductsDAO dao;
 	private static EntityFactory ef;
-	private static final String testURL = "jdbc:h2:~/p8db;user=login;password=password;";
+	private static final String testURL = "jdbc:h2:~/mydb;user=login;password=password;";
 	static private Product productTest;
 	static private Category categoryTest;
 	static private Key taste;
@@ -82,8 +82,6 @@ public class ProductsDAOTest {
 
 		List <Product> products = dao.getAllProducts();
 		assertEquals(4, products.size());
-		productTest.setDateCreation(products.get(0).getDateCreation());
-		productTest.setDateModified(products.get(0).getDateCreation());
 
 		assertEquals(productTest, products.get(0));
 	}
@@ -95,9 +93,7 @@ public class ProductsDAOTest {
 	}
 	@Test
 	public void shouldGetProductById () throws DBException {
-		Product product = dao.getProductById(dao.getConnection(), 1, true);
-		productTest.setDateCreation(product.getDateCreation());
-		productTest.setDateModified(product.getDateModified());
+		Product product = dao.getProductById(1);
 		assertEquals(productTest, product);
 	}
 	@Test
@@ -107,8 +103,6 @@ public class ProductsDAOTest {
 	@Test
 	public void shouldGetCategoryProducts () throws DBException {
 		List <Product> products = dao.getCategoryProducts(categoryTest);
-		productTest.setDateCreation(products.get(0).getDateCreation());
-		productTest.setDateModified(products.get(0).getDateCreation());
 		assertEquals(2, products.size());
 		assertEquals(productTest, products.get(0));
 	}
@@ -142,9 +136,7 @@ public class ProductsDAOTest {
 		p.attributes().put(color, red);
 		dao.insertProduct(p, categoryTest);
 
-		Product inserted = dao.getProductById(dao.getConnection(), p.getId(), true);
-		p.setDateCreation(inserted.getDateCreation());
-		p.setDateModified(inserted.getDateCreation());
+		Product inserted = dao.getProductById(p.getId());
 
 		assertEquals(p, inserted);
 		assertTrue(dao.getCategoryProducts(categoryTest).contains(p));
@@ -175,9 +167,7 @@ public class ProductsDAOTest {
 
 		dao.updateProduct(p);
 
-		Product updated = dao.getProductById(dao.getConnection(), p.getId(), true);
-		p.setDateCreation(updated.getDateCreation());
-		p.setDateModified(updated.getDateCreation());
+		Product updated = dao.getProductById(p.getId());
 
 		assertEquals(p, updated);
 	}

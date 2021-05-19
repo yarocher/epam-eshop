@@ -20,7 +20,7 @@ import com.eshop.model.db.*;
 public class UsersDAOTest {
 	private static UsersDAO dao;
 	private static EntityFactory ef;
-	private static final String testURL = "jdbc:h2:~/p8db;user=login;password=password;";
+	private static final String testURL = "jdbc:h2:~/mydb;user=login;password=password;";
 	private static User userTest;
 
 	@BeforeClass
@@ -34,6 +34,7 @@ public class UsersDAOTest {
 		userTest = ef.newUser("kekl", "kekp");
 		userTest.setId(1);
 		userTest.setState("ACTIVE");
+		userTest.setRole("CUSTOMER");
 		userTest.data().setFirstName("Kek");
 		userTest.data().setLastName("Kekovich");
 		userTest.data().setEmail("kek@kek.kek");
@@ -59,6 +60,7 @@ public class UsersDAOTest {
 	public void shouldInsertUser () throws DBException {
 		User u = ef.newUser("l", "p");
 		u.setId(1);
+		u.setRole("ADMIN");
 		u.setState("ACTIVE");
 		u.data().setFirstName("fn");
 		u.data().setLastName("ln");
@@ -74,9 +76,11 @@ public class UsersDAOTest {
 	public void shouldUpdateUser () throws DBException {
 		User u = dao.getUserById(2);
 		u.setState("BLOCKED");
+		u.setRole("ADMIN");
 		u.data().setFirstName("fn");
 		u.data().setLastName("ln");
 		u.data().setEmail("em@kek.kek");
+
 
 		dao.updateUser(u);
 

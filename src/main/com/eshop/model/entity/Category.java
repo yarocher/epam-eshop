@@ -27,4 +27,23 @@ public class Category {
 	public String toString () {
 		return "Category" + id + " {name=" + name + ", keys=" + keys + "}";
 	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Category)) return false;
+		Category o = (Category) obj;
+		boolean eq = true;
+		if (id != o.id) eq = false;
+		if (name == null ^ o.name == null) eq = false;
+		if (name != null && !name.equals(o.name)) eq = false;
+		if (!keys().equals(o.keys())) eq = false;
+
+		return eq;
+	}
+
+	@Override
+	public int hashCode () {
+		return (int) id;
+	}
 }

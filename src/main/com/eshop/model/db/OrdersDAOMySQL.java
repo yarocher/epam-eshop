@@ -55,6 +55,12 @@ public class OrdersDAOMySQL implements OrdersDAO  {
 		qe.close(conn);
 		return orders;
 	}
+
+	@Override
+	public Order getOrderById (long id) throws DBException {
+		return getOrderById (getConnection(), id, true);
+	}
+
 	@Override
 	public Order getOrderById (Connection conn, long id, boolean terminal) throws DBException {
 		QueryExecutor <Order> qe = new QueryExecutor <> ();
@@ -112,9 +118,35 @@ public class OrdersDAOMySQL implements OrdersDAO  {
 		return cart;
 	}
 	@Override
-	public boolean insertCart (Cart cart) throws DBException {
-
-		return false;
+	public boolean insertCart (Cart cart, User user) throws DBException {
+		Connection conn = getConnection();
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, Long.toString(user.getId()));
+			stmt.execute();
+			rs = stmt.getGeneratedKeys();
+			boolean res = rs.next();
+			if (res) { 
+				cart.setId(rs.getLong(1));
+			}	
+			for (Map.Entry <Product, Integer> item: cart.items().entrySet()) res = addItemToCart(conn, item, cart);
+			return res;
+		});
+		qe.setErrorMessage("Something went wrong while trying to add item to cart...");
+		boolean res = qe.execute(conn, MySQLQueries.INSERT_CART, true);
+		qe.close(conn);
+		return res;
+	}
+	private boolean addItemToCart (Connection conn, Map.Entry <Product, Integer> item, Cart cart) throws DBException {
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, Long.toString(cart.getId()));
+			stmt.setString(2, Long.toString(item.getKey().getId()));
+			stmt.setString(3, Integer.toString(item.getValue()));
+			return stmt.execute();
+		});
+		qe.setErrorMessage("Something went wrong while trying to add item to cart...");
+		return qe.execute(conn, MySQLQueries.ADD_ITEM_TO_CART, false);
 	}
 	@Override
 	public boolean deleteCart (Cart cart) throws DBException {
@@ -130,9 +162,24 @@ public class OrdersDAOMySQL implements OrdersDAO  {
 		return res;
 	}
 	@Override
-	public boolean insertOrder (Order order) throws DBException {
-
-		return false;
+	public boolean insertOrder (Order order, User user) throws DBException {
+		Connection conn = getConnection ();
+		QueryExecutor <Boolean> qe = new QueryExecutor <> ();
+		qe.setQuery((stmt, rs) -> {
+			stmt.setString(1, Long.toString(order.getCart().getId()));
+			stmt.setString(2, Long.toString(user.getId()));
+			stmt.execute();
+			rs = stmt.getGeneratedKeys();
+			boolean res = rs.next();
+			if (res) { 
+				order.setId(rs.getLong(1));
+			}	
+			return res;
+		});
+		qe.setErrorMessage("Something went wrong while trying to insert order...");
+		boolean res = qe.execute(conn, MySQLQueries.INSERT_ORDER, true);
+		qe.close(conn);
+		return res;
 	}
 	@Override
 	public boolean updateOrder (Order order) throws DBException {

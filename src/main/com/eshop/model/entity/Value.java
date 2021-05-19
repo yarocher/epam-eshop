@@ -19,4 +19,16 @@ public class Value {
 	public String toString () {
 		return name + id;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Value)) return false;
+		Value o = (Value) obj;
+		return name.equals(o.name);
+	}
+
+	@Override
+	public int hashCode () {
+		return (int) id;
+	}
 }

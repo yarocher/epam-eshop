@@ -26,6 +26,18 @@ public class Key {
 
 	@Override
 	public String toString () {
-		return name + values;
+		return name + id + values();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Key)) return false;
+		Key o = (Key) obj;
+		return name.equals(o.name);
+	}
+
+	@Override
+	public int hashCode () {
+		return (int) id;
 	}
 }

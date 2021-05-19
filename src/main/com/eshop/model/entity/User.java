@@ -4,26 +4,26 @@ public class User {
 	private long id;
 	private String login;
 	private String password;
-	private String firstName;
-	private String lastName;
-	private String email;
 	private String state;
+	private String role;
+	private UserData data;
 
 	public long getId () {return id;}
 	public String getLogin () {return login;}
 	public String getPassword () {return password;}
-	public String getFirstName () {return firstName;}
-	public String getLastName () {return lastName;}
-	public String getEmail () {return email;}
 	public String getState () {return state;}
+	public String getRole () {return role; }
+	public UserData data () {
+		if (data == null) data = new UserData ();
+		data.setUserId(id);
+		return data;
+	}
 
 	public void setId (long id) {this.id = id;}
 	public void setLogin (String login) {this.login = login;}
 	public void setPassword (String password) {this.password = password;}
-	public void setFirstName (String firstName) {this.firstName = firstName;}
-	public void setLastName (String lastName) {this.lastName = lastName;}
-	public void setEmail (String email) {this.email = email;}
 	public void setState (String state) {this.state = state;}
+	public void setRole (String role) {this.role = role;}
 
 	public User () {}
 	public User (String login, String password) {
@@ -33,6 +33,26 @@ public class User {
 
 	@Override
 	public String toString () {
-		return "User" + id + " {login=" + login + ", password=" + password + "}";
+		return "User" + id + " {login=" + login + ", password=" + password + ", role=" + role +  "\n" + data + "}";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof User)) return false;
+		User o = (User) obj;
+		boolean eq = true;
+		if (id != o.id) eq = false;
+		if (login == null ^ o.login == null) eq = false;
+		if (login != null && !login.equals(o.login)) eq = false;
+		if (password == null ^ o.password == null) eq = false;
+		if (password != null && !password.equals(o.password)) eq = false;
+		if (!data().equals(o.data())) eq = false;
+
+		return eq;
+	}
+
+	@Override
+	public int hashCode () {
+		return (int) id;
 	}
 }

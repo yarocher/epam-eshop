@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.eshop.model.entity.*;
-import com.eshop.model.ProductPatternBuilder;
+import com.eshop.model.ProductSearcher;
 
 public class ProductsDAOMySQL implements ProductsDAO {
 	private String url = "jdbc:mysql://localhost:3306/mydb?user=login&password=password";
@@ -36,7 +36,7 @@ public class ProductsDAOMySQL implements ProductsDAO {
 	}	
 
 	@Override
-	public List <Product> getProductsByPattern (ProductPatternBuilder pattern) throws DBException {
+	public List <Product> getProductsByPattern (ProductSearcher pattern) throws DBException {
 		String sql = pattern.get();
 
 		Connection conn = getConnection ();
@@ -51,7 +51,6 @@ public class ProductsDAOMySQL implements ProductsDAO {
 				stmt.setString(++k, entry.getKey());
 				stmt.setString(++k, entry.getValue());
 			}
-			System.out.println(stmt);
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
@@ -175,6 +174,11 @@ public class ProductsDAOMySQL implements ProductsDAO {
 		});
 		qe.setErrorMessage("Something went wrong while trying to get key values...");
 		return qe.execute(conn, MySQLQueries.GET_KEY_VALUES, false);
+	}
+
+	@Override
+	public Product getProductById (long id)  throws DBException {
+		return getProductById (getConnection(), id, true);
 	}
 
 	@Override
@@ -318,12 +322,12 @@ public class ProductsDAOMySQL implements ProductsDAO {
 			if (res) { 
 				category.setId(rs.getLong(1));
 				for (Key key: category.keys()) {
-						insertKey(conn, key);
-						for (Value value: key.values()) {
-							insertValue(conn, value);
-							addValueToKey(conn, value, key);
-						}
-						addKeyToCategory(conn, key, category);
+					insertKey(conn, key);
+					for (Value value: key.values()) {
+						insertValue(conn, value);
+						addValueToKey(conn, value, key);
+					}
+					addKeyToCategory(conn, key, category);
 				}
 			}
 			return res;

@@ -67,6 +67,7 @@ public class UsersDAOMySQL implements UsersDAO{
 			if (rs.next()) {
 				User user = ef.newUser(rs.getString("login"), rs.getString("password"));
 				user.setId(rs.getLong("id"));
+				user.setRole(rs.getString("role"));
 				UserData data = getUserData (conn, user);
 				user.data().setFirstName(data.getFirstName());
 				user.data().setLastName(data.getLastName());
@@ -88,6 +89,7 @@ public class UsersDAOMySQL implements UsersDAO{
 		qe.setQuery((stmt, rs) -> {
 			stmt.setString(1, user.getLogin());
 			stmt.setString(2, user.getPassword());
+			stmt.setString(3, user.getRole());
 			stmt.execute();
 			rs = stmt.getGeneratedKeys();
 			boolean res = rs.next();
@@ -109,7 +111,8 @@ public class UsersDAOMySQL implements UsersDAO{
 		qe.setQuery((stmt, rs) -> {
 			stmt.setString(1, user.getLogin());
 			stmt.setString(2, user.getPassword());
-			stmt.setString(3, Long.toString(user.getId()));
+			stmt.setString(3, user.getRole());
+			stmt.setString(4, Long.toString(user.getId()));
 			updateUserData(conn, user.data());
 			return stmt.execute();
 		});

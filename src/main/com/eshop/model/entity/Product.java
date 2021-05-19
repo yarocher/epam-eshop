@@ -10,7 +10,7 @@ public class Product {
 	private Map <Key, Value> attributes;
 	private String description;
 	private int amount;
-	private double price;
+	private double price = -1;
 	private Date dateCreation;
 	private Date dateModified;
 	private String state;
@@ -63,6 +63,30 @@ public class Product {
 		sb.append("\tdate of modifiyng: " + dateModified + "\n");
 		sb.append("\tstate: " + state + "\n");
 		return sb.toString(); 
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Product)) return false;
+		Product o = (Product) obj;
+		boolean eq = true;
+		if (id != o.id) eq = false;
+		if (amount != o.amount) eq = false;
+		if (price - o.price > Math.abs(0.01))  eq = false;
+		if (description == null ^ o.description == null) eq = false;
+		if (description != null && !description.equals(o.description)) eq = false;
+		if (name == null ^ o.name == null) eq = false;
+		if (name != null && !name.equals(o.name)) eq = false;
+		if (state == null ^ o.state == null) eq = false;
+		if (state != null && !state.equals(o.state)) eq = false;
+		if (!attributes().equals(o.attributes())) eq = false;
+
+		return eq;
+	}
+
+	@Override
+	public int hashCode () {
+		return (int) id;
 	}
 
 }

@@ -46,7 +46,7 @@ public class MySQLQueries {
 	public static final String PRICE_MIN_FILTER = " price >= ? ";
 	public static final String ATTRIBUTE_FILTER = " attribute_key.name = ? AND attribute_value.name = ?";
 
-	public static final String PRODUCT_PATTERN = "SELECT DISTINCT product.id FROM product " +
+	public static final String PRODUCT_PATTERN = "SELECT DISTINCT product.id, product.price, product.name, product.date_creation FROM product " +
 		"INNER JOIN attribute " +
 		"ON attribute.product_id = product.id " +
 		"INNER JOIN attribute_key " +
@@ -60,9 +60,9 @@ public class MySQLQueries {
 	public static final String GET_ALL_USERS = "SELECT * FROM user";
 	public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
 	public static final String GET_USER_DATA = "SELECT * FROM user_data WHERE user_id = ?";
-	public static final String INSERT_USER = "INSERT INTO user (login, password) VALUES (?, ?)";
+	public static final String INSERT_USER = "INSERT INTO user (login, password, role) VALUES (?, ?, ?)";
 	public static final String INSERT_USER_DATA = "INSERT INTO user_data (first_name, last_name, email, user_id) VALUES (?, ?, ?, ?)";
-	public static final String UPDATE_USER = "UPDATE user SET login = ?, password = ? WHERE id = ?";
+	public static final String UPDATE_USER = "UPDATE user SET login = ?, password = ?, role = ? WHERE id = ?";
 	public static final String UPDATE_USER_DATA  = "UPDATE user_data SET first_name = ?, last_name = ?, email = ? WHERE user_id = ?";
 	public static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
 
@@ -78,6 +78,14 @@ public class MySQLQueries {
 	public static final String INSERT_ORDER = "INSERT INTO `order` (cart_id, user_id) VALUES (?, ?)";
 	public static final String UPDATE_ORDER = "UPDATE `order` SET state = ? WHERE id = ?";
 	public static final String DELETE_ORDER = "DELETE FROM `order` WHERE id = ?";
+
+	public static final String ADD_ITEM_TO_CART = "INSERT INTO cart_product (cart_id, product_id, amount) VALUES (?, ?, ?)";
+
+	public static final String NAME_SORTER = " ORDER BY name";
+	public static final String PRICE_SORTER = " ORDER BY price";
+	public static final String DATE_SORTER = " ORDER BY date_creation";
+	
+	public static final String DESCENDING  = " DESC";
 
 
 }

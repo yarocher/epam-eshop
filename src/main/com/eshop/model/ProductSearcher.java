@@ -6,10 +6,11 @@ import java.util.HashMap;
 
 import com.eshop.model.db.MySQLQueries;
 
-public class ProductPatternBuilder {
+public class ProductSearcher {
 	private String name;
 	private double priceMax = -1;
 	private double priceMin = -1;
+	private String sorter;
 	private Map <String, String> attributes;
 
 	public String name () {return name;}
@@ -20,23 +21,28 @@ public class ProductPatternBuilder {
 		return attributes;
 	}
 
-	public ProductPatternBuilder addName (String name) {
+	public ProductSearcher addName (String name) {
 		this.name = name;	
 		return this;
 	}
 
-	public ProductPatternBuilder addPriceMax (double priceMax) {
+	public ProductSearcher addPriceMax (double priceMax) {
 		this.priceMax = priceMax;	
 		return this;
 	}
 
-	public ProductPatternBuilder addPriceMin (double priceMin) {
+	public ProductSearcher addPriceMin (double priceMin) {
 		this.priceMin = priceMin;	
 		return this;
 	}
 
-	public ProductPatternBuilder addAttribute (String key, String value) {
+	public ProductSearcher addAttribute (String key, String value) {
 		attributes().put(key, value);
+		return this;
+	}
+
+	public ProductSearcher sortBy (String sorter) {
+		this.sorter = sorter;
 		return this;
 	}
 
@@ -68,6 +74,7 @@ public class ProductPatternBuilder {
 			sb.append(MySQLQueries.ATTRIBUTE_FILTER);
 			more = true;
 		}
+		if (sorter != null) sb.append(sorter);
 		return sb.toString();
 
 	}
