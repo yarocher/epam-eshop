@@ -17,6 +17,7 @@ import java.sql.SQLException;
 
 import com.eshop.model.entity.*;
 import com.eshop.model.db.*;
+import com.eshop.model.*;
 
 
 public class ProductsDAOTest {
@@ -77,6 +78,19 @@ public class ProductsDAOTest {
 		RunScript.execute(dao.getConnection(), new FileReader ("sql/h2-fill-init.sql"));
 	}
 
+	@Test
+	public void shouldGetSearchProductsByPattern () throws DBException {
+
+		ProductSearcher pattern = new ProductSearcher ();
+		pattern
+			.addName("green apple")
+			.addPriceMin(4.0)
+			.addPriceMax(5.0)
+			.sortBy(MySQLQueries.DATE_SORTER + MySQLQueries.DESCENDING);
+		List <Product> products = dao.getProductsByPattern(pattern);
+		assertEquals(1, products.size());
+		assertEquals(productTest, products.get(0));
+	}
 	@Test
 	public void shouldGetAllProducts () throws DBException {
 
