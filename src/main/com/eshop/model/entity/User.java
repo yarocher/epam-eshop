@@ -1,29 +1,32 @@
 package com.eshop.model.entity;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 public class User {
 	private long id;
 	private String login;
 	private String password;
-	private String state;
-	private String role;
-	private UserData data;
+	private UserState state;
+	private Role role;
+	private List <Order> orders;
 
 	public long getId () {return id;}
 	public String getLogin () {return login;}
 	public String getPassword () {return password;}
-	public String getState () {return state;}
-	public String getRole () {return role; }
-	public UserData data () {
-		if (data == null) data = new UserData ();
-		data.setUserId(id);
-		return data;
+	public UserState getState () {return state;}
+	public Role getRole () {return role; }
+	public List <Order> orders () {
+		if (orders == null) orders = new ArrayList <> ();
+		return orders;
 	}
 
 	public void setId (long id) {this.id = id;}
 	public void setLogin (String login) {this.login = login;}
 	public void setPassword (String password) {this.password = password;}
-	public void setState (String state) {this.state = state;}
-	public void setRole (String role) {this.role = role;}
+	public void setState (UserState state) {this.state = state;}
+	public void setRole (Role role) {this.role = role;}
 
 	public User () {}
 	public User (String login, String password) {
@@ -33,7 +36,7 @@ public class User {
 
 	@Override
 	public String toString () {
-		return "User" + id + " {login=" + login + ", password=" + password + ", role=" + role +  "\n" + data + "}";
+		return "User" + id + "(" + state + ") {login=" + login + ", password=" + password + ", role=" + role + ", orders=" + orders().stream().map(o -> o.getId()).collect(Collectors.toList()) +  "}";
 	}
 
 	@Override
@@ -46,7 +49,11 @@ public class User {
 		if (login != null && !login.equals(o.login)) eq = false;
 		if (password == null ^ o.password == null) eq = false;
 		if (password != null && !password.equals(o.password)) eq = false;
-		if (!data().equals(o.data())) eq = false;
+		if (role == null ^ o.role == null) eq = false;
+		if (role != null && !role.equals(o.role)) eq = false;
+		if (state == null ^ o.state == null) eq = false;
+		if (state != null && !state.equals(o.state)) eq = false;
+		if (!orders().equals(o.orders())) eq = false;
 
 		return eq;
 	}

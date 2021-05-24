@@ -1,34 +1,35 @@
 package com.eshop.model.entity;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Date;
 
 public class Order {
 	private long id;
-	private Cart cart;
-	private String state;
-	private Date dateCreation;
+	private Map <Product, Integer> items;
+	private OrderState state;
+	private Date dateCreated;
 	private Date dateModified;
 
 	public long getId () {return id;}
-	public Cart getCart () {return cart;}
-	public String getState () {return state;}
-	public Date getDateCreation () {return dateCreation;};
+	public Map <Product, Integer> items () {
+		if (items == null) items = new HashMap <> ();
+		return items;
+	}
+	public OrderState getState () {return state;}
+	public Date getDateCreated () {return dateCreated;};
 	public Date getDateModified () {return dateModified;};
 
 	public void setId (long id) {this.id = id;}
-	public void setCart (Cart cart) {this.cart = cart;}
-	public void setState (String state) {this.state = state;}
-	public void setDateCreation (Date date) {this.dateCreation = date;}
+	public void setState (OrderState state) {this.state = state;}
+	public void setDateCreated (Date date) {this.dateCreated = date;}
 	public void setDateModified (Date date) {this.dateModified = date;}
-
-	public Order () {}
-	public Order (Cart cart) {
-		setCart(cart);
-	}
 
 	@Override
 	public String toString () {
-		return "Order" + id + " {" + cart + ", " + state + "}";
+		StringBuilder sb = new StringBuilder ("Order" + id + "(" + state + ")\n\tdate created: " + dateCreated + "\n\tdate modified: " + dateModified +	"\n\titems : ");
+		for (Map.Entry<Product, Integer> entry: items().entrySet()) sb.append("\n\t\t" + entry.getKey().getName() + " (" + entry.getValue() + ");");
+		return sb.toString();
 	}
 
 
@@ -40,8 +41,7 @@ public class Order {
 		if (id != o.id) eq = false;
 		if (state == null ^ o.state == null) eq = false;
 		if (state != null && !state.equals(o.state)) eq = false;
-		if (cart == null ^ o.cart == null) eq = false;
-		if (cart != null && !cart.equals(o.cart)) eq = false;
+		if (!items().equals(o.items())) eq = false;
 
 		return eq;
 	}
