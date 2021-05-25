@@ -5,6 +5,7 @@ import java.util.Date;
 public class Product {
 	private long id;
 	private String name;
+	private String categoryName;
 	private String description;
 	private int amount;
 	private double price = -1;
@@ -14,6 +15,7 @@ public class Product {
 
 	public long getId () {return id;};
 	public String getName () {return name;};
+	public String getCategoryName () {return categoryName;};
 	public String getDescription () {return description;};
 	public int getAmount () {return amount;};
 	public double getPrice () {return price;};
@@ -23,6 +25,7 @@ public class Product {
 
 	public void setId (long id) {this.id = id;}
 	public void setName (String name) {this.name = name;}
+	public void setCategoryName (String categoryName) {this.categoryName = categoryName;}
 	public void setDescription (String description) {this.description = description;}
 	public void setAmount (int amount) {this.amount = amount;}
 	public void setPrice (double price) {this.price = price;}
@@ -40,6 +43,7 @@ public class Product {
 	@Override
 	public String toString () {
 		return name + id + 
+			"\n\tcategory: " + categoryName +
 			"\n\tprice: " + price +
 			"\n\tamount: " + amount +
 			"\n\tdate created: " + dateCreated +
@@ -60,6 +64,8 @@ public class Product {
 		if (description != null && !description.equals(o.description)) eq = false;
 		if (name == null ^ o.name == null) eq = false;
 		if (name != null && !name.equals(o.name)) eq = false;
+		if (categoryName == null ^ o.categoryName == null) eq = false;
+		if (categoryName != null && !categoryName.equals(o.categoryName)) eq = false;
 		if (state == null ^ o.state == null) eq = false;
 		if (state != null && !state.equals(o.state)) eq = false;
 
