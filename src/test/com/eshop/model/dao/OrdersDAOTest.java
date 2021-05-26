@@ -49,7 +49,6 @@ public class OrdersDAOTest {
 			testOrders[0].setState(OrderState.NEW);
 			dao.create(testOrders[0]);
 			Order o = dao.findById(4);
-			System.out.println(o);
 			assertEquals(testOrders[0], o);
 		}
 
@@ -58,7 +57,6 @@ public class OrdersDAOTest {
 	public void shouldFindOrderById () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			Order o = dao.findById(1);
-			System.out.println(o);
 			assertEquals(testOrders[0], o);
 		}
 
@@ -71,6 +69,16 @@ public class OrdersDAOTest {
 			assertEquals(testOrders[0], orders.get(0));
 			assertEquals(testOrders[1], orders.get(1));
 			assertEquals(testOrders[2], orders.get(2));
+		}
+
+	}
+	@Test
+	public void shouldFindUserOrders () throws Exception {
+		try (OrdersDao dao = daoFactory.createOrdersDao()) {
+			List <Order> orders = dao.findUserOrders(TestData.users()[0]);
+			assertEquals(2, orders.size());
+			assertTrue(orders.contains(testOrders[0]));
+			assertTrue(orders.contains(testOrders[1]));
 		}
 
 	}

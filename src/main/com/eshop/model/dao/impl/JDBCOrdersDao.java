@@ -14,6 +14,7 @@ import com.eshop.model.dao.SQL;
 import com.eshop.model.dao.DBException;
 import com.eshop.model.dao.OrdersDao;
 import com.eshop.model.entity.Order;
+import com.eshop.model.entity.User;
 import com.eshop.model.entity.Product;
 import com.eshop.model.dao.mapper.OrderMapper;
 import com.eshop.model.dao.mapper.ProductMapper;
@@ -105,6 +106,26 @@ public class JDBCOrdersDao implements OrdersDao {
 		}
 		catch (SQLException sqle) {
 			throw new DBException (DBException.FIND_ORDERS, sqle);
+		}
+	}
+
+	@Override
+	public List <Order> findUserOrders (User u) throws DBException {
+		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_USER_ORDERS)) {
+			stmt.setString(1, Long.toString(u.getId()));
+			try (ResultSet rs = stmt.executeQuery()) {
+				List <Order> orders = new ArrayList <> ();
+				OrderMapper mapper = new OrderMapper ();
+				while (rs.next()) {
+					Order o = new OrderMapper().extractFromResultSet(rs);
+					setOrderItems(o);
+					orders.add(o); 
+				}
+				return orders;
+			}
+		}
+		catch (SQLException sqle) {
+			throw new DBException (DBException.FIND_USER_ORDERS, sqle);
 		}
 	}
 

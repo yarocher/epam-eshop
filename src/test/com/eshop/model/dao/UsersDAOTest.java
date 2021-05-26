@@ -47,12 +47,6 @@ public class UsersDAOTest {
 		}
 	}
 	@Test
-	public void shouldAddUserOrder () throws Exception {
-		try (UsersDao dao = daoFactory.createUsersDao()) {
-			//work with dao
-		}
-	}
-	@Test
 	public void shouldFindUserById () throws Exception {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			User u = dao.findById(1);
