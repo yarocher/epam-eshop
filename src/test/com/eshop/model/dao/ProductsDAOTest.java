@@ -15,6 +15,8 @@ import java.sql.SQLException;
 
 import java.util.List;
 
+import com.eshop.model.ProductSearcher;
+import com.eshop.model.Sorter;
 import com.eshop.model.entity.*;
 import com.eshop.model.dao.DaoFactory;
 import com.eshop.model.dao.ProductsDao;
@@ -26,7 +28,7 @@ public class ProductsDAOTest {
 
 	@BeforeClass
 	public static void initFactory () {
-		testURL = "jdbc:h2:~/mydb;user=login;password=password;";
+		testURL = "jdbc:h2:~/eshop-test-db;user=login;password=password;";
 		daoFactory = DaoFactory.getInstance();
 	}
 
@@ -40,9 +42,10 @@ public class ProductsDAOTest {
 	@Test
 	public void shouldCreateProduct () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
-			dao.create(testProducts[0]);
-			Product p = dao.findById(4);
-			assertEquals(testProducts[0], p);
+			Product p = testProducts[0];
+			dao.create(p);
+			Product created = dao.findById(p.getId());
+			assertEquals(p, created);
 		}
 	}
 	@Test
@@ -60,6 +63,16 @@ public class ProductsDAOTest {
 			assertEquals(testProducts[0], products.get(0));
 			assertEquals(testProducts[1], products.get(1));
 			assertEquals(testProducts[2], products.get(2));
+		}
+	}
+	@Test
+	public void shouldFindByPattern () throws Exception {
+		try (ProductsDao dao = daoFactory.createProductsDao()) {
+			ProductSearcher pattern = new ProductSearcher();
+			pattern
+				.addCategory("cups")
+				.sortBy(Sorter.NAME, true);
+			assertEquals(testProducts[0], dao.findByPattern(pattern).get(1));
 		}
 	}
 	@Test

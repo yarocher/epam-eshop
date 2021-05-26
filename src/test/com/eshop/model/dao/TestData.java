@@ -11,7 +11,7 @@ public class TestData {
 		p1.setAmount(324);
 		p1.setState(ProductState.ON_SALE);
 		p1.setPrice(234.12);
-		p1.setCategoryName("cups");
+		p1.setCategory("cups");
 
 		Product p2 = new Product ();
 		p2.setId(2);
@@ -20,7 +20,7 @@ public class TestData {
 		p2.setAmount(235);
 		p2.setState(ProductState.HIDDEN);
 		p2.setPrice(224.32);
-		p2.setCategoryName("cups");
+		p2.setCategory("cups");
 
 		Product p3 = new Product ();
 		p3.setId(3);
@@ -29,7 +29,7 @@ public class TestData {
 		p3.setAmount(311);
 		p3.setState(ProductState.ON_SALE);
 		p3.setPrice(24.32);
-		p3.setCategoryName("books");
+		p3.setCategory("books");
 
 		return new Product [] {p1, p2, p3};
 
@@ -75,6 +75,8 @@ public class TestData {
 		u1.setRole(Role.CUSTOMER);
 		u1.orders().add(o1);
 		u1.orders().add(o2);
+		o1.setUserId(u1.getId());
+		o2.setUserId(u1.getId());
 
 		User u2 = new User ();
 		u2.setId(2);
@@ -83,6 +85,7 @@ public class TestData {
 		u2.setState(UserState.BLOCKED);
 		u2.setRole(Role.CUSTOMER);
 		u2.orders().add(o3);
+		o3.setUserId(u2.getId());
 
 		User u3 = new User ();
 		u3.setId(3);
@@ -90,7 +93,7 @@ public class TestData {
 		u3.setPassword("p3");
 		u3.setState(UserState.ACTIVE);
 		u3.setRole(Role.ADMIN);
-		
+
 		return new User [] {u1, u2, u3};
 	}
 }

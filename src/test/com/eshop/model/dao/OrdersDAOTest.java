@@ -26,13 +26,19 @@ public class OrdersDAOTest {
 
 	@BeforeClass
 	public static void initFactory () {
-		testURL = "jdbc:h2:~/mydb;user=login;password=password;";
+		testURL = "jdbc:h2:~/eshop-test-db;user=login;password=password;";
 		daoFactory = DaoFactory.getInstance();
 	}
 
 	@Before
 	public void setUp () throws FileNotFoundException, SQLException {
 		testOrders = TestData.orders();
+
+		for (int i = 0; i < testOrders.length; i++) {
+			User u = new User ();
+			u.setId(i + 1);
+			testOrders[i].setUserId(u.getId());
+		}
 		
 		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-reset.sql"));
 		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-fill-init.sql"));
@@ -40,8 +46,10 @@ public class OrdersDAOTest {
 	@Test
 	public void shouldCreateOrder () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
+			testOrders[0].setState(OrderState.NEW);
 			dao.create(testOrders[0]);
 			Order o = dao.findById(4);
+			System.out.println(o);
 			assertEquals(testOrders[0], o);
 		}
 
@@ -50,6 +58,7 @@ public class OrdersDAOTest {
 	public void shouldFindOrderById () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			Order o = dao.findById(1);
+			System.out.println(o);
 			assertEquals(testOrders[0], o);
 		}
 

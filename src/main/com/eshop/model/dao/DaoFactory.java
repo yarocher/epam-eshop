@@ -10,7 +10,7 @@ public abstract class DaoFactory {
 		return instance;
 	}
 	
-	public abstract ProductsDao createProductsDao ();
-	public abstract UsersDao createUsersDao ();
-	public abstract OrdersDao createOrdersDao ();
+	public abstract ProductsDao createProductsDao () throws DBException;
+	public abstract UsersDao createUsersDao () throws DBException;
+	public abstract OrdersDao createOrdersDao () throws DBException;
 }

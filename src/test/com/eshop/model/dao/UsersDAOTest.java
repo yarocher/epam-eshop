@@ -26,7 +26,7 @@ public class UsersDAOTest {
 
 	@BeforeClass
 	public static void initFactory () {
-		testURL = "jdbc:h2:~/mydb;user=login;password=password;";
+		testURL = "jdbc:h2:~/eshop-test-db;user=login;password=password;";
 		daoFactory = DaoFactory.getInstance();
 	}
 
@@ -38,11 +38,18 @@ public class UsersDAOTest {
 		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-fill-init.sql"));
 	}
 	@Test
-	public void shouldCreateUser () throws Exception {
+	public void shouldCreateUser () throws Exception{
 		try (UsersDao dao = daoFactory.createUsersDao()) {
+			testUsers[0].setLogin("ll");
 			dao.create(testUsers[0]);
 			User u = dao.findById(4);
 			assertEquals(testUsers[0], u);
+		}
+	}
+	@Test
+	public void shouldAddUserOrder () throws Exception {
+		try (UsersDao dao = daoFactory.createUsersDao()) {
+			//work with dao
 		}
 	}
 	@Test

@@ -53,7 +53,7 @@ public class User {
 		if (role != null && !role.equals(o.role)) eq = false;
 		if (state == null ^ o.state == null) eq = false;
 		if (state != null && !state.equals(o.state)) eq = false;
-		if (!orders().equals(o.orders())) eq = false;
+		//if (!orders().equals(o.orders())) eq = false;
 
 		return eq;
 	}
