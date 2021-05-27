@@ -1,5 +1,7 @@
-package com.ehsop.controller.command;
+package com.eshop.controller.command;
+
+import javax.servlet.http.HttpServletRequest;
 
 public interface Command {
-	String execute (/*HttpServletRequest req*/);
+	String execute (HttpServletRequest req);
 }
