@@ -20,6 +20,7 @@ public class SQL {
 	public static final String INSERT_USER = "INSERT INTO user (login, password, role) VALUES (?, ?, ?)";
 	public static final String SELECT_ALL_USERS = "SELECT * FROM user";
 	public static final String SELECT_USER_BY_ID = SELECT_ALL_USERS + " WHERE id = ?";
+	public static final String SELECT_USER_BY_LOGIN = SELECT_ALL_USERS + " WHERE login = ?";
 	public static final String UPDATE_USER = "UPDATE user SET login = ?, password = ?, state = ?, role = ? WHERE id = ?";
 	public static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
 

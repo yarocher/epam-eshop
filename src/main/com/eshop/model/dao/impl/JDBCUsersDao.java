@@ -62,6 +62,23 @@ public class JDBCUsersDao implements UsersDao {
 	}
 
 	@Override
+	public User findByLogin (String login) throws DBException  {
+		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_USER_BY_LOGIN)) {
+			stmt.setString(1, login);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					User u = new UserMapper().extractFromResultSet(rs); 
+					return u;
+				}
+				else throw new DBException (DBException.USER_NOT_FOUND);
+			}
+		}
+		catch (SQLException sqle) {
+			throw new DBException (DBException.FIND_USER, sqle);
+		}
+	}
+
+	@Override
 	public List <User> findAll () throws DBException  {
 		try (Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(SQL.SELECT_ALL_USERS)) {

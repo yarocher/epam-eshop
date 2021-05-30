@@ -12,7 +12,7 @@ import com.eshop.model.entity.Order;
 public class UsersService {
 	DaoFactory daoFactory = DaoFactory.getInstance();
 
-	public void createUser (User u) throws DBException {
+	public void createUser (User u)throws DBException  {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			dao.create(u);
 		}
@@ -27,6 +27,21 @@ public class UsersService {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
 			User u = usersDao.findById(id);
+			u.orders().addAll(ordersDao.findUserOrders(u));
+			return u;
+		}
+		catch (DBException dbe) {
+			throw dbe;
+		}
+		catch (Exception e) {
+			throw new RuntimeException (e);
+		}	
+
+	}
+	public User getUser (String login) throws DBException {
+		try (UsersDao usersDao = daoFactory.createUsersDao(); 
+			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
+			User u = usersDao.findByLogin(login);
 			u.orders().addAll(ordersDao.findUserOrders(u));
 			return u;
 		}

@@ -6,10 +6,20 @@
 	<servlet>
 		<servlet-name>front-controller</servlet-name>
 		<servlet-class>com.eshop.controller.Servlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>front-controller</servlet-name>
-		<url-pattern>/controller</url-pattern>
+		<url-pattern>/controller/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>login-page</servlet-name>
+		<jsp-file>/login.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>login-page</servlet-name>
+		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
 </web-app>
