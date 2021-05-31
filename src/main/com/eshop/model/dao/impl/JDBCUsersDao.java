@@ -39,6 +39,7 @@ public class JDBCUsersDao implements UsersDao {
 			}
 		}
 		catch (SQLException sqle) {
+			if (sqle.getErrorCode() == 1062) throw new DBException (DBException.NOT_UNIQUE_LOGIN, sqle);
 			throw new DBException (DBException.CREATE_USER, sqle);
 		}
 

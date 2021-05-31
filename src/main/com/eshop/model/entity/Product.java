@@ -2,7 +2,7 @@ package com.eshop.model.entity;
 
 import java.util.Date;
 
-public class Product {
+public class Product implements java.io.Serializable{
 	private long id;
 	private String name;
 	private String category;

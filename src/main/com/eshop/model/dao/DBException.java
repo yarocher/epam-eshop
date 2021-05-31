@@ -22,10 +22,12 @@ public class DBException extends Exception {
 	public static final String CREATE_USER = "Can't create user...";
 	public static final String FIND_USER = "Can't find user...";
 	public static final String FIND_USERS = "Can't find users...";
-	public static final String USER_NOT_FOUND = "Order not found";
+	public static final String USER_NOT_FOUND = "User not found";
 	public static final String UPDATE_USER = "Can't update user...";
 	public static final String DELETE_USER = "Can't delete user...";
 	public static final String FIND_USER_ORDERS = "Can't find user orders...";
+
+	public static final String NOT_UNIQUE_LOGIN = "This login is already exists!";
 
 	public DBException (String msg) {
 		super (msg);

@@ -7,8 +7,7 @@ public class TestData {
 		Product p1 = new Product ();
 		p1.setId(1);
 		p1.setName("cup1");
-		p1.setDescription("desc of cup1");
-		p1.setAmount(324);
+		p1.setDescription("desc of cup1"); p1.setAmount(324);
 		p1.setState(ProductState.ON_SALE);
 		p1.setPrice(234.12);
 		p1.setCategory("cups");
@@ -75,8 +74,8 @@ public class TestData {
 		u1.setRole(Role.CUSTOMER);
 		u1.orders().add(o1);
 		u1.orders().add(o2);
-		o1.setUserId(u1.getId());
-		o2.setUserId(u1.getId());
+		o1.setUser(u1);
+		o2.setUser(u1);
 
 		User u2 = new User ();
 		u2.setId(2);
@@ -85,7 +84,7 @@ public class TestData {
 		u2.setState(UserState.BLOCKED);
 		u2.setRole(Role.CUSTOMER);
 		u2.orders().add(o3);
-		o3.setUserId(u2.getId());
+		o3.setUser(u2);
 
 		User u3 = new User ();
 		u3.setId(3);

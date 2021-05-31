@@ -12,7 +12,6 @@ public class OrderMapper implements ObjectMapper <Order> {
 		Order o = new Order ();
 		o.setId(rs.getLong("id"));
 		o.setDateCreated(rs.getDate("date_created"));
-		o.setUserId(rs.getLong("user_id"));
 		o.setDateModified(rs.getDate("date_modified"));
 		String state = rs.getString("state");
 		if ("NEW".equals(state)) o.setState(OrderState.NEW);

@@ -4,13 +4,13 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
 
-public class Order {
+public class Order implements java.io.Serializable {
 	private long id;
 	private Map <Product, Integer> items;
 	private OrderState state;
 	private Date dateCreated;
 	private Date dateModified;
-	private long userId;
+	private User user;
 
 	public long getId () {return id;}
 	public Map <Product, Integer> items () {
@@ -20,17 +20,17 @@ public class Order {
 	public OrderState getState () {return state;}
 	public Date getDateCreated () {return dateCreated;};
 	public Date getDateModified () {return dateModified;};
-	public long getUserId () {return userId;};
+	public User getUser () {return user;};
 
 	public void setId (long id) {this.id = id;}
 	public void setState (OrderState state) {this.state = state;}
 	public void setDateCreated (Date date) {this.dateCreated = date;}
 	public void setDateModified (Date date) {this.dateModified = date;}
-	public void setUserId (long userId) {this.userId = userId;}
+	public void setUser (User user) {this.user = user;}
 
 	@Override
 	public String toString () {
-		StringBuilder sb = new StringBuilder ("Order" + id + "(" + state + ")" + "\n\tuserId: " + userId + "\n\tdate created: " + dateCreated + "\n\tdate modified: " + dateModified +	"\n\titems : ");
+		StringBuilder sb = new StringBuilder ("Order" + id + "(" + state + ")" + "\n\tuser: " + user + "\n\tdate created: " + dateCreated + "\n\tdate modified: " + dateModified +	"\n\titems : ");
 		for (Map.Entry<Product, Integer> entry: items().entrySet()) sb.append("\n\t\t" + entry.getKey().getName() + " (" + entry.getValue() + ");");
 		return sb.toString();
 	}

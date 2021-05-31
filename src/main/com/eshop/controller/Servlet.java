@@ -28,7 +28,7 @@ public class Servlet extends HttpServlet {
 		CommandOutput output = command.execute(req);
 		String page = output.getPage();
 
-		if (output.forRedirect()) res.sendRedirect(page); 
+		if (output.forRedirect()) res.sendRedirect(req.getContextPath() + page); 
 		else getServletContext().getRequestDispatcher(page).forward(req, res);
 	}
 }

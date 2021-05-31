@@ -17,6 +17,7 @@ import com.eshop.model.entity.Order;
 import com.eshop.model.entity.User;
 import com.eshop.model.entity.Product;
 import com.eshop.model.dao.mapper.OrderMapper;
+import com.eshop.model.dao.mapper.UserMapper;
 import com.eshop.model.dao.mapper.ProductMapper;
 
 public class JDBCOrdersDao implements OrdersDao {
@@ -29,11 +30,12 @@ public class JDBCOrdersDao implements OrdersDao {
 	@Override
 	public void create (Order o) throws DBException  {
 		try (PreparedStatement stmt = connection.prepareStatement(SQL.INSERT_ORDER, Statement.RETURN_GENERATED_KEYS)) {
-			stmt.setString(1, Long.toString(o.getUserId()));
+			stmt.setString(1, Long.toString(o.getUser().getId()));
 			stmt.execute();
 			try (ResultSet rs = stmt.getGeneratedKeys()) {
 				if (rs.next()) {
 					o.setId(rs.getLong(1));
+					o.getUser().orders().add(o);
 					for (Map.Entry <Product, Integer> entry: o.items().entrySet()) addOrderItem(o, entry.getKey(), entry.getValue());
 				}
 			}
@@ -75,12 +77,22 @@ public class JDBCOrdersDao implements OrdersDao {
 
 	@Override
 	public Order findById (long id) throws DBException {
-		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_ORDER_BY_ID)) {
-			stmt.setString(1, Long.toString(id));
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					Order o = new OrderMapper().extractFromResultSet(rs);
+		try (PreparedStatement stmtO = connection.prepareStatement(SQL.SELECT_ORDER_BY_ID);
+				PreparedStatement stmtU = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+			stmtO.setString(1, Long.toString(id));
+			try (ResultSet rsO = stmtO.executeQuery()) {
+				if (rsO.next()) {
+					Order o = new OrderMapper().extractFromResultSet(rsO);
 					setOrderItems(o);
+					stmtU.setString(1, Long.toString(rsO.getLong("user_id")));
+					try (ResultSet rsU = stmtU.executeQuery();) {
+						if (rsU.next()) {
+							User user = new UserMapper().extractFromResultSet(rsU);
+							o.setUser(user);
+							user.orders().add(o);
+						}
+						else throw new DBException (DBException.USER_NOT_FOUND);
+					}
 					return o; 
 				}
 				else throw new DBException (DBException.ORDER_NOT_FOUND);
@@ -93,13 +105,23 @@ public class JDBCOrdersDao implements OrdersDao {
 
 	@Override
 	public List <Order> findAll () throws DBException {
-		try (Statement stmt = connection.createStatement();
-			ResultSet rs = stmt.executeQuery(SQL.SELECT_ALL_ORDERS)) {
+		try (PreparedStatement stmtO = connection.prepareStatement(SQL.SELECT_ALL_ORDERS);
+			ResultSet rsO = stmtO.executeQuery();
+			PreparedStatement stmtU = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
 			List <Order> orders = new ArrayList <> ();
 			OrderMapper mapper = new OrderMapper ();
-			while (rs.next()) {
-				Order o = new OrderMapper().extractFromResultSet(rs);
+			while (rsO.next()) {
+				Order o = new OrderMapper().extractFromResultSet(rsO);
 				setOrderItems(o);
+				stmtU.setString(1, Long.toString(rsO.getLong("user_id")));
+				try (ResultSet rsU = stmtU.executeQuery()) {
+					if (rsU.next()) {
+						User user = new UserMapper().extractFromResultSet(rsU);
+						o.setUser(user);
+						user.orders().add(o);
+					}
+					else throw new DBException (DBException.USER_NOT_FOUND);
+				}
 				orders.add(o); 
 			}
 			return orders;
@@ -111,14 +133,24 @@ public class JDBCOrdersDao implements OrdersDao {
 
 	@Override
 	public List <Order> findUserOrders (User u) throws DBException {
-		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_USER_ORDERS)) {
-			stmt.setString(1, Long.toString(u.getId()));
-			try (ResultSet rs = stmt.executeQuery()) {
+		try (PreparedStatement stmtO = connection.prepareStatement(SQL.SELECT_USER_ORDERS);
+				PreparedStatement stmtU = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+			stmtO.setString(1, Long.toString(u.getId()));
+			try (ResultSet rsO = stmtO.executeQuery()) {
 				List <Order> orders = new ArrayList <> ();
 				OrderMapper mapper = new OrderMapper ();
-				while (rs.next()) {
-					Order o = new OrderMapper().extractFromResultSet(rs);
+				while (rsO.next()) {
+					Order o = new OrderMapper().extractFromResultSet(rsO);
 					setOrderItems(o);
+					stmtU.setString(1, Long.toString(rsO.getLong("user_id")));
+					try (ResultSet rsU = stmtU.executeQuery();) {
+						if (rsU.next()) {
+							User user = new UserMapper().extractFromResultSet(rsU);
+							o.setUser(user);
+							user.orders().add(o);
+						}
+						else throw new DBException (DBException.USER_NOT_FOUND);
+					}
 					orders.add(o); 
 				}
 				return orders;

@@ -37,7 +37,7 @@ public class OrdersDAOTest {
 		for (int i = 0; i < testOrders.length; i++) {
 			User u = new User ();
 			u.setId(i + 1);
-			testOrders[i].setUserId(u.getId());
+			testOrders[i].setUser(u);
 		}
 		
 		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-reset.sql"));
@@ -47,8 +47,10 @@ public class OrdersDAOTest {
 	public void shouldCreateOrder () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			testOrders[0].setState(OrderState.NEW);
+			System.out.println(testOrders[0]);
 			dao.create(testOrders[0]);
 			Order o = dao.findById(4);
+			System.out.println(o);
 			assertEquals(testOrders[0], o);
 		}
 

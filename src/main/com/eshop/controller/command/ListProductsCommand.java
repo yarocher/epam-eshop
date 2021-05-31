@@ -17,8 +17,10 @@ public class ListProductsCommand implements Command {
 			req.getServletContext().setAttribute("products", products);
 			return new CommandOutput ("/products.jsp");
 		}
-		catch (DBException dbe) {
-			return null;
+		catch (DBException e) {
+			e.printStackTrace();
+			req.getServletContext().setAttribute("exception", e);
+			return new CommandOutput ("/error.jsp");
 		}
 	}
 }

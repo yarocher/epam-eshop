@@ -17,8 +17,10 @@ public class ListOrdersCommand implements Command {
 			req.getServletContext().setAttribute("orders", orders);
 			return new CommandOutput ("/orders.jsp");
 		}
-		catch (DBException dbe) {
-			return null;			
+		catch (DBException e) {
+			e.printStackTrace();
+			req.getServletContext().setAttribute("exception", e);
+			return new CommandOutput ("/error.jsp");
 		}
 	}
 }

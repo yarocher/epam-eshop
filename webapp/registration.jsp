@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 </html>
 	<head>
-		<title>Login</title>
+		<title>Registration</title>
 	</head>
 	<body>
 		<a href="http://localhost:8080/eshop/">main</a><br>
-		<h1>Login</h1>
-		<form action="http://localhost:8080/eshop/controller/login" method="POST">
+		<h1>Registration</h1>
+		<form action="http://localhost:8080/eshop/controller/reg" method="POST">
 			<label for="login">Login:</label><br>
 			<input type="text" id="login" name="login"><br>
 			<label for="password">Password:</label><br>

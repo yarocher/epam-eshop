@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class User {
+public class User  implements java.io.Serializable{
 	private long id;
 	private String login;
 	private String password;
@@ -32,6 +32,7 @@ public class User {
 	public User (String login, String password) {
 		setLogin(login);
 		setPassword(password);
+		setRole(Role.CUSTOMER);
 	}
 
 	@Override
