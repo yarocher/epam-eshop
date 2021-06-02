@@ -24,8 +24,6 @@ public class LocalizationFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 
-		res.setContentType("text/html");
-		res.setCharacterEncoding("UTF-8");
 		String localeName = req.getParameter("lang");
 
 		ResourceBundle content = null;

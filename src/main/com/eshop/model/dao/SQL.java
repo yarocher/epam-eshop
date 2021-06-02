@@ -4,7 +4,7 @@ public class SQL {
 	public static final String INSERT_PRODUCT = "INSERT INTO product (name, description, amount, price, category) VALUES (?, ?, ?, ?, ?)";
 	public static final String SELECT_ALL_PRODUCTS = "SELECT * FROM product";
 	public static final String SELECT_PRODUCT_BY_ID = SELECT_ALL_PRODUCTS + " WHERE product.id = ?";
-	public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, description = ?, amount = ?, price = ?, state = ? WHERE id = ?";
+	public static final String UPDATE_PRODUCT = "UPDATE product SET name = ?, description = ?, amount = ?, price = ?, state = ?, category = ?  WHERE id = ?";
 	public static final String DELETE_PRODUCT = "DELETE FROM product WHERE id = ?";
 
 	public static final String INSERT_ORDER = "INSERT INTO `order` (user_id) VALUES (?)";

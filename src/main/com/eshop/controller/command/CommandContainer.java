@@ -23,6 +23,11 @@ public class CommandContainer {
 		Command cart = new CartCommand ();
 		Command account = new AccountCommand ();
 		Command updateOrder = new UpdateOrderCommand ();
+		Command updateUser = new UpdateUserCommand ();
+		Command deleteUser = new DeleteUserCommand ();
+		Command updateProduct = new UpdateProductCommand ();
+		Command deleteProduct = new DeleteProductCommand ();
+		Command createProduct = new CreateProductCommand ();
 
 		commands.put("logout", logout);
 		commands.put("add-item", addItem); 
@@ -35,6 +40,11 @@ public class CommandContainer {
 		commands.put("cart", cart);
 		commands.put("account", account);
 		commands.put("update-order", updateOrder);
+		commands.put("update-user", updateUser);
+		commands.put("delete-user", deleteUser);
+		commands.put("update-product", updateProduct);
+		commands.put("delete-product", deleteProduct);
+		commands.put("create-product", createProduct);
 
 		guestCommands.add(index); 
 		guestCommands.add(products);	
@@ -57,6 +67,11 @@ public class CommandContainer {
 		adminCommands.add(orders);	
 		adminCommands.add(logout);	
 		adminCommands.add(updateOrder);	
+		adminCommands.add(updateUser);	
+		adminCommands.add(deleteUser);	
+		adminCommands.add(updateProduct);	
+		adminCommands.add(deleteProduct);	
+		adminCommands.add(createProduct);	
 	}
 
 	public static Command get (String name) {

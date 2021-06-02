@@ -7,15 +7,20 @@ import javax.servlet.http.HttpServletRequest;
 import com.eshop.model.dao.DBException;
 import com.eshop.model.service.UsersService;
 import com.eshop.model.entity.User;
+import com.eshop.model.entity.UserState;
 
-public class AccountCommand implements Command {
+public class DeleteUserCommand implements Command {
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
+		UsersService service = new UsersService();
 		try {
-			User user = (User) req.getSession().getAttribute("user");
-			user = new UsersService().getUser(user.getId());
-			req.getSession().setAttribute("user", user);
-			return new CommandOutput ("/user-account.jsp");
+			long id = Long.parseLong(req.getParameter("user_id"));
+
+			User user = service.getUser(id);
+
+			service.deleteUser(user);
+
+			return new CommandOutput ("/controller/users", true);
 		}
 		catch (DBException e) {
 			e.printStackTrace();

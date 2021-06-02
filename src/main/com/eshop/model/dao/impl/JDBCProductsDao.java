@@ -107,6 +107,7 @@ public class JDBCProductsDao implements ProductsDao {
 			stmt.setString(k++, Integer.toString(p.getAmount()));
 			stmt.setString(k++, Double.toString(p.getPrice()));
 			stmt.setString(k++, p.getState().toString());
+			stmt.setString(k++, p.getCategory());
 			stmt.setString(k++, Long.toString(p.getId()));
 			stmt.execute();
 		}

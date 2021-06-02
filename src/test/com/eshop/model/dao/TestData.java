@@ -72,8 +72,8 @@ public class TestData {
 		u1.setPassword("p1");
 		u1.setState(UserState.ACTIVE);
 		u1.setRole(Role.CUSTOMER);
-		u1.orders().add(o1);
-		u1.orders().add(o2);
+		u1.getOrders().add(o1);
+		u1.getOrders().add(o2);
 		o1.setUser(u1);
 		o2.setUser(u1);
 
@@ -83,7 +83,7 @@ public class TestData {
 		u2.setPassword("p2");
 		u2.setState(UserState.BLOCKED);
 		u2.setRole(Role.CUSTOMER);
-		u2.orders().add(o3);
+		u2.getOrders().add(o3);
 		o3.setUser(u2);
 
 		User u3 = new User ();
