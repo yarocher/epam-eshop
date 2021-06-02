@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.eshop.model.dao.DBException;
 import com.eshop.model.service.UsersService;
 import com.eshop.model.entity.User;
+import com.eshop.model.entity.UserState;
 
 public class RegistrationCommand implements Command {
 	@Override
@@ -16,7 +17,14 @@ public class RegistrationCommand implements Command {
 		try {
 			if (req.getSession().getAttribute("user") != null) throw new AuthorizationException ("already logged in");
 
-			User user = new User (req.getParameter("login"), req.getParameter("password"));
+			String login = req.getParameter("login");
+			String password = req.getParameter("password");
+
+			Validator.validateLogin(login);
+			Validator.validatePassword(password);
+
+			User user = new User (login, password);
+			user.setState(UserState.ACTIVE);
 			service.createUser(user);
 
 			req.getSession().setAttribute("user", user);
@@ -30,7 +38,7 @@ public class RegistrationCommand implements Command {
 		}
 		catch (AuthorizationException | DBException e) {
 			e.printStackTrace();
-			req.getServletContext().setAttribute("exception", e);
+			req.getSession().setAttribute("exception", e);
 			return new CommandOutput ("/error.jsp");
 		}
 	}

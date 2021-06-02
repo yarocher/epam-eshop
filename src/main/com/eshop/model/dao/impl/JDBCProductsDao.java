@@ -79,8 +79,8 @@ public class JDBCProductsDao implements ProductsDao {
 	public List <Product> findByPattern (ProductSearcher pattern) throws DBException {
 		try (PreparedStatement stmt = connection.prepareStatement(pattern.get())) {
 			int k = 1;
-			if (pattern.name() != null) stmt.setString(k++, pattern.name());
-			if (pattern.category() != null) stmt.setString(k++, pattern.category());
+			if (pattern.name() != null) stmt.setString(k++, "%" + pattern.name() + "%");
+			if (pattern.category() != null) stmt.setString(k++, "%" + pattern.category() + "%");
 			if (pattern.priceMax() != -1) stmt.setString(k++, Double.toString(pattern.priceMax()));
 			if (pattern.priceMin() != -1) stmt.setString(k++, Double.toString(pattern.priceMin()));
 			try (ResultSet rs = stmt.executeQuery();) {

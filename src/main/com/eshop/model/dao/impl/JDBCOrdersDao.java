@@ -35,7 +35,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			try (ResultSet rs = stmt.getGeneratedKeys()) {
 				if (rs.next()) {
 					o.setId(rs.getLong(1));
-					o.getUser().orders().add(o);
+					o.getUser().getOrders().add(o);
 					for (Map.Entry <Product, Integer> entry: o.items().entrySet()) addOrderItem(o, entry.getKey(), entry.getValue());
 				}
 			}
@@ -89,7 +89,7 @@ public class JDBCOrdersDao implements OrdersDao {
 						if (rsU.next()) {
 							User user = new UserMapper().extractFromResultSet(rsU);
 							o.setUser(user);
-							user.orders().add(o);
+							user.getOrders().add(o);
 						}
 						else throw new DBException (DBException.USER_NOT_FOUND);
 					}
@@ -118,7 +118,7 @@ public class JDBCOrdersDao implements OrdersDao {
 					if (rsU.next()) {
 						User user = new UserMapper().extractFromResultSet(rsU);
 						o.setUser(user);
-						user.orders().add(o);
+						user.getOrders().add(o);
 					}
 					else throw new DBException (DBException.USER_NOT_FOUND);
 				}
@@ -147,7 +147,7 @@ public class JDBCOrdersDao implements OrdersDao {
 						if (rsU.next()) {
 							User user = new UserMapper().extractFromResultSet(rsU);
 							o.setUser(user);
-							user.orders().add(o);
+							user.getOrders().add(o);
 						}
 						else throw new DBException (DBException.USER_NOT_FOUND);
 					}

@@ -27,7 +27,7 @@ public class UsersService {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
 			User u = usersDao.findById(id);
-			u.orders().addAll(ordersDao.findUserOrders(u));
+			u.getOrders().addAll(ordersDao.findUserOrders(u));
 			return u;
 		}
 		catch (DBException dbe) {
@@ -42,7 +42,7 @@ public class UsersService {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
 			User u = usersDao.findByLogin(login);
-			u.orders().addAll(ordersDao.findUserOrders(u));
+			u.getOrders().addAll(ordersDao.findUserOrders(u));
 			return u;
 		}
 		catch (DBException dbe) {
@@ -57,7 +57,7 @@ public class UsersService {
 		try (UsersDao usersDao = daoFactory.createUsersDao();
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
 			List <User> users = usersDao.findAll();
-			for (User u: users) u.orders().addAll(ordersDao.findUserOrders(u));
+			for (User u: users) u.getOrders().addAll(ordersDao.findUserOrders(u));
 			return users;
 		}
 		catch (DBException dbe) {

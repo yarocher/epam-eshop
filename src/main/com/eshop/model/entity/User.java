@@ -17,7 +17,7 @@ public class User  implements java.io.Serializable{
 	public String getPassword () {return password;}
 	public UserState getState () {return state;}
 	public Role getRole () {return role; }
-	public List <Order> orders () {
+	public List <Order> getOrders() {
 		if (orders == null) orders = new ArrayList <> ();
 		return orders;
 	}
@@ -37,7 +37,7 @@ public class User  implements java.io.Serializable{
 
 	@Override
 	public String toString () {
-		return "User" + id + "(" + state + ") {login=" + login + ", password=" + password + ", role=" + role + ", orders=" + orders().stream().map(o -> o.getId()).collect(Collectors.toList()) +  "}";
+		return "User" + id + "(" + state + ") {login=" + login + ", password=" + password + ", role=" + role + ", orders=" + getOrders().stream().map(o -> o.getId()).collect(Collectors.toList()) +  "}";
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class User  implements java.io.Serializable{
 		if (role != null && !role.equals(o.role)) eq = false;
 		if (state == null ^ o.state == null) eq = false;
 		if (state != null && !state.equals(o.state)) eq = false;
-		//if (!orders().equals(o.orders())) eq = false;
+		//if (!getOrders().equals(o.getOrders())) eq = false;
 
 		return eq;
 	}

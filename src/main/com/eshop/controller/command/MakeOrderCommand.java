@@ -33,7 +33,7 @@ public class MakeOrderCommand implements Command {
 		}
 		catch (DBException e) {
 			e.printStackTrace();
-			req.getServletContext().setAttribute("exception", e);
+			req.getSession().setAttribute("exception", e);
 			return new CommandOutput ("/error.jsp");
 		}
 	}

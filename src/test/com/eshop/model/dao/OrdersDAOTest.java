@@ -47,10 +47,8 @@ public class OrdersDAOTest {
 	public void shouldCreateOrder () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			testOrders[0].setState(OrderState.NEW);
-			System.out.println(testOrders[0]);
 			dao.create(testOrders[0]);
 			Order o = dao.findById(4);
-			System.out.println(o);
 			assertEquals(testOrders[0], o);
 		}
 

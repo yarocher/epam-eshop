@@ -19,6 +19,7 @@ public class LoginCommand implements Command {
 		UsersService service = new UsersService();
 		try {
 			HttpSession session = req.getSession();
+			System.out.println(session.getAttribute("user"));
 			if (session.getAttribute("user") != null) throw new AuthorizationException ("already logged in");
 
 			User user = service.getUser(req.getParameter("login"));
@@ -36,7 +37,7 @@ public class LoginCommand implements Command {
 		}
 		catch (AuthorizationException | DBException e) {
 			e.printStackTrace();
-			req.getServletContext().setAttribute("exception", e);
+			req.getSession().setAttribute("exception", e);
 			return new CommandOutput ("/error.jsp");
 		}
 	}
