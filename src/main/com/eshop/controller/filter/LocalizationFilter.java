@@ -2,13 +2,9 @@ package com.eshop.controller.filter;
 
 import java.io.IOException;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,20 +18,12 @@ public class LocalizationFilter implements Filter {
 	@Override
 	public void doFilter (ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse res = (HttpServletResponse) response;
 
-		String localeName = req.getParameter("lang");
+		String paramLocale = req.getParameter("lang");
+		String sessionLocale = (String) req.getSession().getAttribute("locale");
 
-		ResourceBundle content = null;
-
-		if (localeName == null) content = ResourceBundle.getBundle("content");
-		else {
-			Locale locale = new Locale (localeName);
-			content = ResourceBundle.getBundle("content", locale);
-		}
+		if (paramLocale != null && !paramLocale.equals(sessionLocale)) req.getSession().setAttribute("locale", paramLocale);
 		
-		req.getSession().setAttribute("content", content);
-
 		chain.doFilter(request, response);
 	}
 	@Override

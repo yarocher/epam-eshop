@@ -47,7 +47,19 @@ public class SearchProductsCommand implements Command {
 			System.out.println(pattern.get());
 
 			List <Product> products = service.searchProducts(pattern);
-			req.getServletContext().setAttribute("products", products);
+
+			Pages <Product> pages = new Pages <> (Integer.parseInt(req.getServletContext().getInitParameter("pagePortion")));
+			pages.getAll().addAll(products);
+
+			int pageNum;
+			try {
+				pageNum = Integer.parseInt(req.getParameter("page"));
+			}
+			catch (NumberFormatException | NullPointerException e) {
+				pageNum = 1;
+			}
+
+			req.getServletContext().setAttribute("products", pages.getPage(pageNum));
 			return new CommandOutput ("/products.jsp");
 		}
 		catch (DBException e) {

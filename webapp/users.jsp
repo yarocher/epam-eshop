@@ -1,33 +1,49 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Users</title>
-	</head>
-	<body>
-		<div align="right"><a align="right" href="<%=request.getRequestURI()%>?lang=en">EN</a></div><br>
-		<div align="right"><a align="right" href="<%=request.getRequestURI()%>?lang=ru">RU</a></div><br>
-		<a href="http://localhost:8080/eshop/">main</a><br>
-		<%= session.getAttribute("user") != null ? ""  : "<a href=\"http://localhost:8080/eshop/reg\">registation</a><br>"%>
-		<%= session.getAttribute("user") != null ? ""  : "<a href=\"http://localhost:8080/eshop/login\">login</a><br>"%>
-		<%= session.getAttribute("user") == null ? ""  : "<a href=\"http://localhost:8080/eshop/controller/logout\">logout</a><br>"%>
-		<%= session.getAttribute("user") == null ? ""  : "<a href=\"http://localhost:8080/eshop/controller/account\">account</a><br>"%>
-		<a href="http://localhost:8080/eshop/controller/cart">cart</a><br>
-		<h1>Users</h1>
-		<c:forEach items="${users}" var="user">
-			<p>
-				<c:out value="${user}"/>
-				<form action="http://localhost:8080/eshop/controller/update-user" method="POST">
-					<label for="state">Set state:</label>
-					<input type="text" id="state" name="state">
-					<input type="hidden" name="user_id" value="${user.id}">
-					<input type="submit" value="Set">
-				</form>
-				<form action="http://localhost:8080/eshop/controller/delete-user" method="DELETE">
-					<button name="user_id" value="${user.id}">Delete</button>
-				</form>
-			</p>
-		</c:forEach>
-	</body>
-</html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="uri" scope="session" value="${pageContext.request.requestURI}"/>
+<c:set var="user" scope="session" value="${sessionScope.user}"/>
+<c:set var="context_path" scope="page" value="${pageContext.request.contextPath}"/>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="content">
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title><fmt:message key="all-users"/></title>
+		</head>
+		<body>
+			<div align="right"><a align="right" href="${uri}?lang=en"><fmt:message key="en"/></a></div><br>
+			<div align="right"><a align="right" href="${uri}?lang=ru"><fmt:message key="ru"/></a></div><br>
+			<a href="${context_path}/"><fmt:message key="main"/></a><br>
+			<h1><fmt:message key="all-users"/></h1>
+			<hr>
+			<c:set var="page" value="${param.page}"/>
+			<c:if test="${empty page}">
+				<c:set var="page" value="1"/>
+			</c:if>
+			<form>
+				<c:if test="${page != 1}">
+					<button name="page" value="${page - 1}">prev</button>	
+				</c:if>
+			</form>
+			<form>
+				<button name="page" value="${page + 1}">next</button>	
+			</form>
+			<c:forEach items="${applicationScope.users}" var="user">
+				<p>
+				<c:out value="${user.login} (${user.state})"/><br>
+					<form action="${context_path}/controller/update-user" method="POST">
+						<label for="state"><fmt:message key="set-state"/>:</label>
+						<input type="text" id="state" name="state">
+						<input type="hidden" name="user_id" value="${user.id}">
+						<input type="submit" value="<fmt:message key="set"/>">
+					</form>
+					<form action="${context_path}/controller/delete-user" method="DELETE">
+						<button name="user_id" value="${user.id}"><fmt:message key="delete"/></button>
+					</form>
+				</p>
+				<hr>
+			</c:forEach>
+		</body>
+	</html>
+</fmt:bundle>

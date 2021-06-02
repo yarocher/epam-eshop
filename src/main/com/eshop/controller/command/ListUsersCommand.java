@@ -14,7 +14,19 @@ public class ListUsersCommand implements Command {
 		UsersService service = new UsersService();
 		try {
 			List <User> users = service.getUsers();
-			req.getServletContext().setAttribute("users", users);
+
+			Pages <User> pages = new Pages <> (Integer.parseInt(req.getServletContext().getInitParameter("pagePortion")));
+			pages.getAll().addAll(users);
+
+			int pageNum;
+			try {
+				pageNum = Integer.parseInt(req.getParameter("page"));
+			}
+			catch (NumberFormatException | NullPointerException e) {
+				pageNum = 1;
+			}
+
+			req.getServletContext().setAttribute("users", pages.getPage(pageNum));
 			return new CommandOutput ("/users.jsp");
 		}
 		catch (DBException e) {

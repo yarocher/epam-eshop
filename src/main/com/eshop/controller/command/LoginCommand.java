@@ -27,6 +27,7 @@ public class LoginCommand implements Command {
 
 			session.setAttribute("user", user);
 
+			@SuppressWarnings("unchecked")
 			List <User> loggedUsers = (List<User>) req.getServletContext().getAttribute("logged-users");
 			if (loggedUsers == null) loggedUsers = new ArrayList <User> ();
 			if (loggedUsers.contains(user)) throw new AuthorizationException ("already logged in");

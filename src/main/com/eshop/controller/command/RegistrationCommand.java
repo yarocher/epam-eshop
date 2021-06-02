@@ -29,6 +29,7 @@ public class RegistrationCommand implements Command {
 
 			req.getSession().setAttribute("user", user);
 
+			@SuppressWarnings("unchecked")
 			List <User> loggedUsers = (List<User>) req.getServletContext().getAttribute("logged-users");
 			if (loggedUsers == null) loggedUsers = new ArrayList <User> ();
 			loggedUsers.add(user);

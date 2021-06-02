@@ -80,4 +80,8 @@
 		<error-code>404</error-code>
 		<location>/404.jsp</location>
 	</error-page>
+	<context-param>
+		<param-name>pagePortion</param-name>
+		<param-value>2</param-value>
+	</context-param>
 </web-app>

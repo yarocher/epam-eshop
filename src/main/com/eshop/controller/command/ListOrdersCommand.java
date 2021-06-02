@@ -14,7 +14,19 @@ public class ListOrdersCommand implements Command {
 		OrdersService service = new OrdersService();
 		try {
 			List <Order> orders = service.getOrders();
-			req.getServletContext().setAttribute("orders", orders);
+
+			Pages <Order> pages = new Pages <> (Integer.parseInt(req.getServletContext().getInitParameter("pagePortion")));
+			pages.getAll().addAll(orders);
+
+			int pageNum;
+			try {
+				pageNum = Integer.parseInt(req.getParameter("page"));
+			}
+			catch (NumberFormatException | NullPointerException e) {
+				pageNum = 1;
+			}
+
+			req.getServletContext().setAttribute("orders", pages.getPage(pageNum));
 			return new CommandOutput ("/orders.jsp");
 		}
 		catch (DBException e) {

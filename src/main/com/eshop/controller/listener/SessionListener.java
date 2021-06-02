@@ -25,6 +25,7 @@ public class SessionListener implements HttpSessionListener {
 		System.out.println("SESSION WAS DESTROYED");
 		HttpSession session = httpSessionEvent.getSession();
 		User user = (User) session.getAttribute("user");
+		@SuppressWarnings("unchecked")
 		List <User> loggedUsers = (List <User>) session.getServletContext().getAttribute("logged-users");
 
 		if (loggedUsers != null) {

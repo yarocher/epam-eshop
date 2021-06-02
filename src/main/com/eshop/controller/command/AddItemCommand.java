@@ -15,7 +15,8 @@ public class AddItemCommand implements Command {
 	public CommandOutput execute (HttpServletRequest req) {
 		try {
 			HttpSession session = req.getSession();
-			Map <Product, Integer> items = (Map <Product, Integer>) session.getAttribute("cart");
+			@SuppressWarnings("unchecked")
+			Map <Product, Integer>  items  = (Map <Product, Integer>) session.getAttribute("cart");
 			long productId = Long.parseLong(req.getParameter("product_id"));
 
 			Product product = new ProductsService().getProduct(productId);

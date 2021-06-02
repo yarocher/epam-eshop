@@ -14,7 +14,10 @@ public class ListProductsCommand implements Command {
 		ProductsService service = new ProductsService();
 		try {
 			List <Product> products = service.getProducts();
-			req.getServletContext().setAttribute("products", products);
+			Pages <Product> pages = new Pages <> (2);
+			pages.getAll().addAll(products);
+			req.getServletContext().setAttribute("productsPages", pages);
+			System.out.println(req.getServletContext().getAttribute("productsPage"));
 			return new CommandOutput ("/products.jsp");
 		}
 		catch (DBException e) {

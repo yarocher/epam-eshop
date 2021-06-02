@@ -20,6 +20,7 @@ public class MakeOrderCommand implements Command {
 	public CommandOutput execute (HttpServletRequest req) {
 		try {
 			HttpSession session = req.getSession();
+			@SuppressWarnings("unchecked")
 			Map <Product, Integer> items = (Map <Product, Integer>) session.getAttribute("cart");
 			User user = (User) session.getAttribute("user");
 			user = new UsersService().getUser(user.getId());
