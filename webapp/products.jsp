@@ -15,9 +15,11 @@
 		<%= session.getAttribute("user") == null ? ""  : "<a href=\"http://localhost:8080/eshop/controller/account\">account</a><br>"%>
 		<a href="http://localhost:8080/eshop/controller/cart">cart</a><br>
 		<h1>Products</h1>
-			<form action="http://localhost:8080/eshop/create-product">
-				<button>create</button>
-			</form>
+			<c:if test="${sessionScope.user.role == 'ADMIN'}">
+				<form action="http://localhost:8080/eshop/create-product">
+					<button>create</button>
+				</form>
+			</c:if>
 		<form>
 			<label for="name">Name:</label>
 			<input type="text" id="name" name="name">
@@ -39,12 +41,16 @@
 			<form action="http://localhost:8080/eshop/controller/add-item" method="POST">
 				<button name="product_id" value="${product.id}">add</button>
 			</form>
-			<form action = "http://localhost:8080/eshop/edit-product">
-				<button name="product_id" value="${product.id}">edit</button>
-			</form>
-			<form action = "http://localhost:8080/eshop/controller/delete-product">
-				<button name="product_id" value="${product.id}">delete</button>
-			</form>
+			<c:if test="${sessionScope.user.role == 'ADMIN'}">
+				<form action="http://localhost:8080/eshop/edit-product">
+					<button name="product_id" value="${product.id}">edit</button>
+				</form>
+			</c:if>
+			<c:if test="${sessionScope.user.role == 'ADMIN'}">
+				<form action="http://localhost:8080/eshop/controller/delete-product">
+					<button name="product_id" value="${product.id}">delete</button>
+				</form>
+			</c:if>
 		</c:forEach>
 	</body>
 </html>
