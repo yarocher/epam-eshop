@@ -42,21 +42,21 @@ public class TestData {
 		Order o1 = new Order ();
 		o1.setId(1);
 		o1.setState(OrderState.PAYED);
-		o1.items().put(p1, 3);
-		o1.items().put(p3, 2);
+		o1.getItems().put(p1, 3);
+		o1.getItems().put(p3, 2);
 
 		Order o2 = new Order ();
 		o2.setId(2);
 		o2.setState(OrderState.NEW);
-		o2.items().put(p2, 5);
-		o2.items().put(p3, 1);
+		o2.getItems().put(p2, 5);
+		o2.getItems().put(p3, 1);
 
 		Order o3 = new Order ();
 		o3.setId(3);
 		o3.setState(OrderState.CANCELLED);
-		o3.items().put(p1, 2);
-		o3.items().put(p2, 9);
-		o3.items().put(p3, 2);
+		o3.getItems().put(p1, 2);
+		o3.getItems().put(p2, 9);
+		o3.getItems().put(p3, 2);
 
 		return new Order [] {o1, o2, o3};
 	}

@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 	</html>
 		<head>
-			<title>Edit product</title>
+			<title><fmt:message key="edit"/> <fmt:message key="product"/></title>
 		</head>
 		<body>
 			<div align="right"><a align="right" href="${uri}?lang=en"><fmt:message key="en"/></a></div><br>
@@ -28,8 +28,13 @@
 				<input type="text" id="amount" name="amount"><br>
 				<label for="price"><fmt:message key="price"/>:</label><br>
 				<input type="text" id="price" name="price"><br>
-				<label for="state"><fmt:message key="state"/>:</label><br>
-				<input type="text" id="state" name="state"><br>
+
+				<label for="state"><fmt:message key="state"/>:</label>
+				<select name="state">
+					<option value="ON_SALE"><fmt:message key="ON_SALE"/></option>
+					<option value="HIDDEN"><fmt:message key="HIDDEN"/></option>
+				</select>
+
 				<input type="submit" value="<fmt:message key="edit"/>">
 			</form>
 		</body>

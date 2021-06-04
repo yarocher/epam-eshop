@@ -34,10 +34,14 @@
 				<c:out value="Order #${order.id} (${order.state})"/><br>
 				<c:out value="date of creation: ${order.dateCreated}"/><br>
 				<c:out value="date of last modifying: ${order.dateModified}"/><br>
-					<form action="${context_path}/update-order" method="POST">
-						<label for="state"><fmt:message key="set-state"/>:</label>
-						<input type="text" id="state" name="state">
+					<form action="${context_path}/controller/update-order" method="POST">
 						<input type="hidden" name="order_id" value="${order.id}">
+						<label for="state"><fmt:message key="set-state"/>:</label>
+						<select name="state">
+							<option value="NEW">new</option>
+							<option value="PAYED">payed</option>
+							<option value="CANCELLED">cancelled</option>
+						</select>
 						<input type="submit" value="<fmt:message key="set"/>">
 					</form>
 				</p>

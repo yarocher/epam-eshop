@@ -106,6 +106,24 @@ public class OrdersDAOTest {
 			assertFalse(orders.contains(o));
 			assertEquals(2, orders.size());
 		}
+	}
+	@Test
+	public void shouldRollbackIfFail () throws Exception {
+		try (OrdersDao dao = daoFactory.createOrdersDao()) {
+			Order o = testOrders[2];
+			o.getItems().clear();
+			o.getItems().put(TestData.products()[0], -1); //amount con't be less then zero
 
+			boolean passed = false;
+			try {
+				dao.create(o); //should fail after order was inserted and rollback
+			}
+			catch (DBException dbe) {
+				passed = true;
+			}
+
+			assertTrue(passed);
+			assertEquals(3, dao.findAll().size());
+		}
 	}
 }

@@ -13,7 +13,7 @@ public class Order implements java.io.Serializable {
 	private User user;
 
 	public long getId () {return id;}
-	public Map <Product, Integer> items () {
+	public Map <Product, Integer> getItems() {
 		if (items == null) items = new HashMap <> ();
 		return items;
 	}
@@ -31,7 +31,7 @@ public class Order implements java.io.Serializable {
 	@Override
 	public String toString () {
 		StringBuilder sb = new StringBuilder ("Order" + id + "(" + state + ")" + "\n\tuser: " + user + "\n\tdate created: " + dateCreated + "\n\tdate modified: " + dateModified +	"\n\titems : ");
-		for (Map.Entry<Product, Integer> entry: items().entrySet()) sb.append("\n\t\t" + entry.getKey().getName() + " (" + entry.getValue() + ");");
+		for (Map.Entry<Product, Integer> entry: getItems().entrySet()) sb.append("\n\t\t" + entry.getKey().getName() + " (" + entry.getValue() + ");");
 		return sb.toString();
 	}
 
@@ -44,7 +44,7 @@ public class Order implements java.io.Serializable {
 		if (id != o.id) eq = false;
 		if (state == null ^ o.state == null) eq = false;
 		if (state != null && !state.equals(o.state)) eq = false;
-		if (!items().equals(o.items())) eq = false;
+		if (!getItems().equals(o.getItems())) eq = false;
 
 		return eq;
 	}

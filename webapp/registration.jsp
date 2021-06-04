@@ -20,7 +20,7 @@
 				<label for="login"><fmt:message key="login"/>:</label><br>
 				<input type="text" id="login" name="login"><br>
 				<label for="password"><fmt:message key="password"/>:</label><br>
-				<input type="text" id="password" name="password"><br>
+				<input type="password" id="password" name="password"><br>
 				<input type="submit" value="<fmt:message key="submit"/>">
 			</form>
 		</body>

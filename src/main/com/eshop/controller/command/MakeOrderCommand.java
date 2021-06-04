@@ -29,7 +29,7 @@ public class MakeOrderCommand implements Command {
 			if (user.getState() == UserState.BLOCKED) return new CommandOutput ("/403.jsp"); 
 
 			Order order = new Order ();
-			order.items().putAll(items);
+			order.getItems().putAll(items);
 			order.setUser(user);
 
 			new OrdersService().createOrder(order);

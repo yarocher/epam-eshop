@@ -27,8 +27,12 @@ public class AuthFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		User user = (User) req.getSession().getAttribute("user");
-		String commandName = req.getRequestURI().replaceAll("/eshop/controller/", "");
+		String uri = req.getRequestURI();
+		String commandName = uri.contains("controller") ? uri.replaceAll("/eshop/controller/", "") : uri.replaceAll("/eshop/", "");
+		System.out.println(commandName);
 		Command command = CommandContainer.get(commandName);
+
+		System.out.println("user " + user + "is trying to do " + commandName);
 
 		if (user == null && !CommandContainer.isGuestCommand(command)
 			|| user != null && user.getRole() == Role.CUSTOMER && !CommandContainer.isCustomerCommand(command)

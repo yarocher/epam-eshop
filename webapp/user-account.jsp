@@ -16,9 +16,27 @@
 			<div align="right"><a align="right" href="${uri}?lang=ru"><fmt:message key="ru"/></a></div><br>
 			<a href="${context_path}/"><fmt:message key="main"/></a><br>
 			<h1><fmt:message key="account"/></h1>
-			<c:out value="${user}"/>
-			<% java.util.List <com.eshop.model.entity.Order> orders = ((com.eshop.model.entity.User) session.getAttribute("user")).getOrders();%>
-			<% for (com.eshop.model.entity.Order o: orders) out.write(o.toString() + "<br>"); %>
+			<c:out value="login: ${user.login}"/>
+			<c:if test="${user.state == 'BLOCKED'}">
+				<c:out value="(${user.state})"/>
+			</c:if>
+			<hr>
+			<c:forEach items="${user.orders}" var="order">
+				<p>
+				<strong><c:out value="Order #${order.id} (${order.state})"/></strong><br>
+				<c:out value="created: ${order.dateCreated}"/><br>
+				<c:out value="modified: ${order.dateModified}"/><br>
+				<p>
+				<c:out value="items:"/><br>
+				<c:set var="total" value="${0}"/>
+				<c:forEach items="${order.items}" var="item">
+					<c:out value="${item.key.name} (${item.value}): ${item.key.price * item.value} $"/><br>
+					<c:set var="total" value="${total + item.key.price * item.value}"/>
+				</c:forEach>
+				<p><c:out value="total: ${total} $"/></p>
+				</p>
+				<hr>
+			</c:forEach>
 		</body>
 	</html>
 </fmt:bundle>

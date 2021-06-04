@@ -33,10 +33,15 @@
 				<p>
 				<c:out value="${user.login} (${user.state})"/><br>
 					<form action="${context_path}/controller/update-user" method="POST">
-						<label for="state"><fmt:message key="set-state"/>:</label>
-						<input type="text" id="state" name="state">
 						<input type="hidden" name="user_id" value="${user.id}">
-						<input type="submit" value="<fmt:message key="set"/>">
+						<c:if test="${user.state != 'BLOCKED'}">
+							<input type="hidden" name="state" value="BLOCKED">
+							<input type="submit" value="block">
+						</c:if>
+						<c:if test="${user.state == 'BLOCKED'}">
+							<input type="hidden" name="state" value="ACTIVE">
+							<input type="submit" value="unblock">
+						</c:if>
 					</form>
 					<form action="${context_path}/controller/delete-user" method="DELETE">
 						<button name="user_id" value="${user.id}"><fmt:message key="delete"/></button>

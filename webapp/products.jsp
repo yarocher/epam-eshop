@@ -9,7 +9,7 @@
 	<!DOCTYPE html>
 	<html>
 		<head>
-			<title>${all_products_label}</title>
+			<title><fmt:message key="all-products"/></title>
 		</head>
 		<body>
 			<div align="right"><a align="right" href="${uri}?lang=en"><fmt:message key="en"/></a></div><br>
@@ -46,8 +46,14 @@
 				<input type="text" id="min_price" name="price_min">
 				<label for="max_price"><fmt:message key="max"/> <fmt:message key="price"/>:</label>
 				<input type="text" id="max_price" name="price_max">
+
 				<label for="sort_by"><fmt:message key="sort-by"/>:</label>
-				<input type="text" id="sory_by" name="sort_by">
+				<select name="sort_by">
+					<option value="name">name</option>
+					<option value="price">price</option>
+					<option value="date_modified">date</option>
+				</select>
+
 				<label for="desc"><fmt:message key="desc"/>:</label>
 				<input type="radio" id="desc" name="desc"><br>
 
@@ -96,7 +102,9 @@
 					<c:out value="last modifying: ${product.dateModified}"/><br>
 					<c:if test="${empty user || user.role == 'CUSTOMER'}">
 						<form action="${context_path}/controller/add-item" method="POST">
-							<button name="product_id" value="${product.id}"><fmt:message key="add"/></button>
+							<input type="hidden" name="product_id" value="${product.id}">
+							<input type="hidden" name="page" value="${param.page}">
+							<input type="submit" value="<fmt:message key="add"/>">
 						</form>
 					</c:if>
 					<c:if test="${sessionScope.user.role == 'ADMIN'}">

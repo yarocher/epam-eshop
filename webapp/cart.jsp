@@ -16,14 +16,21 @@
 			<div align="right"><a align="right" href="${uri}?lang=ru"><fmt:message key="ru"/></a></div><br>
 			<a href="${context_path}/"><fmt:message key="main"/></a><br>
 			<h1><fmt:message key="cart"/></h1>
-			<ul>
-				<c:forEach items="${cart}" var="item">
-					<li>${item.key.name} (${item.value})<li>
-				</c:forEach>
-			</ul>
-			<form action="${context_path}/controller/make-order" method="POST">
-				<button><fmt:message key="make-order"/></button>
-			</form>
+			<c:if test="${empty cart}">
+				<c:out value="your cart is empty"/>
+			</c:if>
+			<c:if test="${not empty cart}">
+				<ul>
+					<c:forEach items="${cart}" var="item">
+						<c:out value="${item.key.name} (${item.value}): ${item.key.price * item.value}"/><br>
+						<c:set var="total" value="${total + item.key.price * item.value}"/>
+					</c:forEach>
+				</ul>
+				<c:out value="total: ${total}"/>
+				<form action="${context_path}/controller/make-order" method="POST">
+					<button><fmt:message key="make-order"/></button>
+				</form>
+			</c:if>
 		</body>
 	</html>
 </fmt:bundle>

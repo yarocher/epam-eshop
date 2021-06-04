@@ -25,13 +25,13 @@ public class LoginCommand implements Command {
 			User user = service.getUser(req.getParameter("login"));
 			Validator.validateUser(req, user); 
 
-			session.setAttribute("user", user);
-
 			@SuppressWarnings("unchecked")
 			List <User> loggedUsers = (List<User>) req.getServletContext().getAttribute("logged-users");
 			if (loggedUsers == null) loggedUsers = new ArrayList <User> ();
 			if (loggedUsers.contains(user)) throw new AuthorizationException ("already logged in");
 			else loggedUsers.add(user);
+			System.out.println("logged users: " + req.getServletContext().getAttribute("logged-users"));
+			session.setAttribute("user", user);
 			req.getServletContext().setAttribute("logged-users", loggedUsers);
 
 			return new CommandOutput ("/", true);

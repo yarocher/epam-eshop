@@ -2,6 +2,7 @@
 package com.eshop.controller.command;
 
 import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,10 +16,10 @@ public class CreateProductCommand implements Command {
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
 		try {
-			String name = req.getParameter("name");
-			String category = req.getParameter("category");
-			String description = req.getParameter("description");
-			String stateParam = req.getParameter("state");
+
+			String name = new String (req.getParameter("name").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+			String category = new String (req.getParameter("category").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+			String description = new String (req.getParameter("description").getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 			double price;
 			int amount;
 			try {
@@ -29,10 +30,6 @@ public class CreateProductCommand implements Command {
 				throw new IllegalArgumentException ("wrong input");
 			}
 			
-			ProductState state = ProductState.ON_SALE; 
-			
-			for (ProductState ps: ProductState.values()) if (ps.toString().equals(stateParam)) state = ps; 
-			
 			Product product = new Product ();
 
 			product.setName(name);
@@ -40,7 +37,11 @@ public class CreateProductCommand implements Command {
 			product.setDescription(description);
 			product.setPrice(price);
 			product.setAmount(amount);
-			product.setState(state);
+
+			System.out.println("Content-Type: " + req.getHeader("Content-Type"));
+			System.out.println(req.getCharacterEncoding());
+			System.out.println("inserting.." + product);
+
 
 			service.createProduct(product);
 
