@@ -8,7 +8,11 @@ import com.eshop.model.entity.Role;
 
 import com.eshop.controller.Path;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class CartCommand implements Command {
+	Logger logger = Logger.getLogger(CartCommand.class.getName());
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		return new CommandOutput (Path.CART_PAGE);

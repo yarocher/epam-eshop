@@ -31,7 +31,7 @@ public class LocalizationFilter implements Filter {
 		String currentLang = (String) session.getAttribute(Attributes.LANG);
 		String newLang = req.getParameter(Attributes.LANG); 
 
-		logger.log(Level.INFO, "current lang: " + currentLang + ", new lang: " + newLang);
+		//logger.log(Level.INFO, "current lang: " + currentLang + ", new lang: " + newLang);
 		if (newLang != null && !newLang.equals(currentLang)) session.setAttribute(Attributes.LANG, newLang);
 
 		chain.doFilter(request, response);

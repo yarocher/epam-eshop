@@ -16,7 +16,11 @@ import com.eshop.model.entity.Role;
 import com.eshop.controller.Attributes;
 import com.eshop.controller.Path;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class UpdateProductCommand implements Command {
+	Logger logger = Logger.getLogger(UpdateProductCommand.class.getName());
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
@@ -53,7 +57,7 @@ public class UpdateProductCommand implements Command {
 			return new CommandOutput (Path.PRODUCTS, true);
 		}
 		catch (IllegalArgumentException | DBException e) {
-			e.printStackTrace();
+			logger.log(Level.INFO, e.getMessage(), e);
 			req.getSession().setAttribute(Attributes.EXCEPTION, e);
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}

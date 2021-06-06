@@ -17,7 +17,12 @@ import com.eshop.controller.Attributes;
 import com.eshop.controller.Path;
 
 import com.eshop.controller.Pages;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class SearchProductsCommand implements Command {
+	Logger logger = Logger.getLogger(SearchProductsCommand.class.getName());
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
@@ -38,16 +43,18 @@ public class SearchProductsCommand implements Command {
 			if (Attributes.CATEGORY.equals(searchBy)) pattern.addCategory(filter);
 			if (priceMin != null && !priceMin.isEmpty()) pattern.addPriceMin(new BigDecimal(priceMin));
 			if (priceMax != null && !priceMax.isEmpty()) pattern.addPriceMax(new BigDecimal(priceMax));
-			if (sortBy != null) pattern.sortBy(sortBy, "on".equals(desc));
+			if (sortBy != null && !sortBy.isEmpty()) pattern.sortBy(sortBy, "on".equals(desc));
 
 			Pages <Product> pages = new Pages <> (pagePortion);
 			pages.getAll().addAll(service.searchProducts(pattern));
 
-			req.getServletContext().setAttribute(Attributes.PRODUCTS, pages.getPage((page == null) ? 1 : Integer.parseInt(page)));
+			logger.info("searchBy: " + searchBy + ", filter: " + filter + ", price_min: " + priceMin + ", price_max: " + priceMax + ", sort_by: " + sortBy + ", desc: " + desc);
+
+			req.getServletContext().setAttribute(Attributes.PRODUCTS, pages.getPage((page == null || page.isEmpty()) ? 1 : Integer.parseInt(page)));
 			return new CommandOutput (Path.PRODUCTS_PAGE);
 		}
 		catch (IllegalArgumentException | DBException e) {
-			e.printStackTrace();
+			logger.log(Level.INFO, e.getMessage(), e);
 			req.getSession().setAttribute(Attributes.EXCEPTION, e);
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}

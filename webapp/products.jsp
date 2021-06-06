@@ -96,6 +96,7 @@
 				</div>
 			<hr>
 			<div align="center">
+				<a id="elements"/>
 				<c:forEach items="${applicationScope.products}" var="product">
 					<c:if test="${sessionScope.user.role == 'ADMIN'}">
 						<strong>
@@ -133,6 +134,11 @@
 						<c:if test="${empty user || user.role == 'CUSTOMER'}">
 							<form action="${context_path}/controller/add-item" method="POST">
 								<input type="hidden" name="product_id" value="${product.id}">
+								<input type="hidden" name="search_by" value="${param.search_by}">
+								<input type="hidden" name="filter" value="${param.filter}">
+								<input type="hidden" name="price_min" value="${param.price_min}">
+								<input type="hidden" name="price_max" value="${param.price_max}">
+								<input type="hidden" name="sort_by" value="${param.sort_by}">
 								<input type="hidden" name="page" value="${param.page}">
 								<input type="submit" value="<fmt:message key="add"/>" style="background: #c9ecff; font-size: 15px; border-radius: 15px;">
 							</form>

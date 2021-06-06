@@ -15,7 +15,11 @@ import com.eshop.model.dao.DBException;
 import com.eshop.controller.Attributes;
 import com.eshop.controller.Path;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class AddItemCommand implements Command {
+	Logger logger = Logger.getLogger(AddItemCommand.class.getName());
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		try {
@@ -32,10 +36,21 @@ public class AddItemCommand implements Command {
 			}
 			else items.put(product, 1);
 			
-			return new CommandOutput (Path.PRODUCTS, true);
+			String encodedURL = Path.PRODUCTS + 
+					"?" + Attributes.SEARCH_BY + "=" + req.getParameter(Attributes.SEARCH_BY) + 
+					"&" + Attributes.FILTER + "=" + req.getParameter(Attributes.FILTER) + 
+					"&" + Attributes.PRICE_MIN + "=" + req.getParameter(Attributes.PRICE_MIN) + 
+					"&" + Attributes.PRICE_MAX + "=" + req.getParameter(Attributes.PRICE_MAX) +
+					"&" + Attributes.SORT_BY + "=" + req.getParameter(Attributes.SORT_BY) + 
+					"&" + Attributes.PAGE + "=" + req.getParameter(Attributes.PAGE) + 
+					"#" + Attributes.ELEMENTS;
+
+			logger.info("encodedURL: " + encodedURL);
+			
+			return new CommandOutput (encodedURL, true);
 		}
 		catch (DBException e) {
-			e.printStackTrace();
+			logger.log(Level.INFO, e.getMessage(), e);
 			req.getSession().setAttribute(Attributes.EXCEPTION, e);
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}

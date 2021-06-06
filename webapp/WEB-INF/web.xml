@@ -86,6 +86,6 @@
 	</error-page>
 	<context-param>
 		<param-name>pagePortion</param-name>
-		<param-value>5</param-value>
+		<param-value>4</param-value>
 	</context-param>
 </web-app>

@@ -54,12 +54,14 @@
 				</div>
 			<hr>
 			<div align="center">
+				<a id="elements"/>
 				<c:forEach items="${applicationScope.users}" var="user">
 					<c:if test="${user.role != 'ADMIN'}">
 						<p>
 						<c:out value="${user.login} ("/><fmt:message key="${user.state}"/>)<br>
 							<form action="${context_path}/controller/update-user" method="POST">
 								<input type="hidden" name="user_id" value="${user.id}">
+								<input type="hidden" name="page" value="${param.page}">
 								<c:if test="${user.state != 'BLOCKED'}">
 									<input type="hidden" name="state" value="BLOCKED">
 									<input type="submit" value="<fmt:message key="block"/>" style="background: #ff6565; color: #b30000; font-size: 15px; border-radius: 15px;">

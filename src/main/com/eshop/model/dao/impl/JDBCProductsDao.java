@@ -90,6 +90,7 @@ public class JDBCProductsDao implements ProductsDao {
 			if (pattern.getCategory() != null) stmt.setString(k++, "%" + pattern.getCategory() + "%");
 			if (pattern.getPriceMax() != null) stmt.setString(k++, pattern.getPriceMax().toString());
 			if (pattern.getPriceMin() != null) stmt.setString(k++, pattern.getPriceMin().toString());
+			logger.info("stmt: " + stmt);
 			try (ResultSet rs = stmt.executeQuery();) {
 				List <Product> products = new ArrayList <> ();
 				ProductMapper mapper = new ProductMapper ();

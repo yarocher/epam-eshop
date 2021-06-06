@@ -16,7 +16,11 @@ import com.eshop.controller.AuthorizationException;
 import com.eshop.controller.Attributes;
 import com.eshop.controller.Path;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class LogoutCommand implements Command {
+	Logger logger = Logger.getLogger(LogoutCommand.class.getName());
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		UsersService service = new UsersService();
@@ -29,7 +33,7 @@ public class LogoutCommand implements Command {
 			return new CommandOutput ("", true);
 		}
 		catch (AuthorizationException e) {
-			e.printStackTrace();
+			logger.log(Level.INFO, e.getMessage(), e);
 			req.getSession().setAttribute(Attributes.EXCEPTION, e);
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}

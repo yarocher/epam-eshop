@@ -60,11 +60,24 @@
 					<p>
 					<fmt:message key="items"/>:<br>
 					<c:set var="total" value="${0}"/>
-					<c:forEach items="${order.items}" var="item">
-						<c:out value="${item.key.name} (${item.value}): ${item.key.price * item.value} $"/><br>
-						<c:set var="total" value="${total + item.key.price * item.value}"/>
-					</c:forEach>
-					<p><fmt:message key="total"/><c:out value=": ${total} $"/></p>
+					<div align="center">
+						<table style="width:fit-content; background: #64dcff; border-color: blue; border-width: 3px;" border="1">
+							<tr>
+								<th><fmt:message key="product"/></th>
+								<th><fmt:message key="amount"/></th>
+								<th><fmt:message key="price"/></th>
+							</tr>
+							<c:forEach items="${order.items}" var="item">
+							<tr>
+									<td><c:out value="${item.key.name}"/></td>
+									<td><c:out value="${item.value}"/></td>
+									<td><c:out value="${item.key.price * item.value} $"/></td>
+							</tr>
+								<c:set var="total" value="${total + item.key.price * item.value}"/>
+							</c:forEach>
+						</table> 
+						<span><fmt:message key="total"/> : <strong><c:out value="${total} $"/></strong></span>
+					</div>
 					</p>
 					<hr>
 				</c:forEach>

@@ -14,7 +14,11 @@ import com.eshop.model.entity.Role;
 import com.eshop.controller.Attributes;
 import com.eshop.controller.Path;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class UpdateOrderCommand implements Command {
+	Logger logger = Logger.getLogger(UpdateOrderCommand.class.getName());
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		OrdersService service = new OrdersService();
@@ -27,17 +31,19 @@ public class UpdateOrderCommand implements Command {
 			OrderState state = order.getState();
 			
 			for (OrderState os: OrderState.values()) if (os.toString().equals(stateParam)) state = os; 
-			System.out.println(stateParam);
-			System.out.println(state);
 	
 			order.setState(state);
 
 			service.updateOrder(order);
 
-			return new CommandOutput (Path.ORDERS, true);
+			String encodedURL = Path.ORDERS + 
+				"?" + Attributes.PAGE + "=" + req.getParameter(Attributes.PAGE) +
+				"#" + Attributes.ELEMENTS;
+			
+			return new CommandOutput (encodedURL, true);
 		}
 		catch (DBException e) {
-			e.printStackTrace();
+			logger.log(Level.INFO, e.getMessage(), e);
 			req.getSession().setAttribute(Attributes.EXCEPTION, e);
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}

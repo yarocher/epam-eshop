@@ -52,7 +52,9 @@
 					</form>
 					<form>
 						<button name="page" value="${page + 1}" style="background: #92d6fb; border-radius: 15px;"><fmt:message key="next"/></button>	
+					</form>
 			<div align="center">
+			<a id="elements"/>
 				<c:forEach items="${applicationScope.orders}" var="order">
 					<p>
 						<strong><fmt:message key="order"/><c:out value=" #${order.id}"/> (<fmt:message key="${order.state}"/>)</strong><br>
@@ -61,8 +63,10 @@
 						<fmt:message key="date-created"/><c:out value=": ${dateCreated.month} ${dateCreated.dayOfMonth} ${dateCreated.year}"/><br>
 						<fmt:message key="date-modified"/><c:out value=": ${dateModified.month} ${dateModified.dayOfMonth} ${dateModified.year}"/><br>
 
+					</p>
 						<form action="${context_path}/controller/update-order" method="POST">
 							<input type="hidden" name="order_id" value="${order.id}">
+							<input type="hidden" name="page" value="${param.page}">
 							<label for="state"><fmt:message key="set-state"/>:</label>
 							<select name="state" style="background: #fce3ff;">
 								<option value="NEW"><fmt:message key="NEW"/></option>
@@ -71,7 +75,6 @@
 							</select>
 							<input type="submit" value="<fmt:message key="set"/>" style="background: #f092fb; border-radius: 15px;">
 						</form>
-					</p>
 					<hr>
 				</c:forEach>
 			</div>

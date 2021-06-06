@@ -11,7 +11,11 @@ import com.eshop.controller.command.Command;
 import com.eshop.controller.command.CommandOutput;
 import com.eshop.controller.command.CommandContainer;
 
+import java.util.logging.Logger;
+
 public class Servlet extends HttpServlet {
+	Logger logger = Logger.getLogger(Servlet.class.getName());
+
 	@Override
 	public void doGet (HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		processRequest(req, res);
@@ -25,6 +29,9 @@ public class Servlet extends HttpServlet {
 		String contextPath = req.getContextPath();
 		String commandName = req.getRequestURI().replaceAll(contextPath + Path.CONTROLLER + "/", "");
 		Command command = CommandContainer.get(commandName);
+
+		logger.info(req.getRequestURI());
+		logger.info("current command: " + commandName + " (" + command + ")");
 
 		CommandOutput output = command.execute(req);
 		String page = output.getPage();

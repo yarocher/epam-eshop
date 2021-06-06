@@ -28,4 +28,5 @@ public class Attributes {
 	public static final String PRODUCTS = "products";
 	public static final String STATE = "state";
 	public static final String LANG = "lang";
+	public static final String ELEMENTS = "elements";
 }
