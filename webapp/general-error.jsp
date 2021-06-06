@@ -47,7 +47,7 @@
 				</div>
 			</header>
 			<h1><fmt:message key="sorry"/></h1>
-			<p><fmt:message key="not-found"/></p>		
+			<p>Something went wrong, please come back later...</p>		
 		</body>
 	</html>
 </fmt:bundle>

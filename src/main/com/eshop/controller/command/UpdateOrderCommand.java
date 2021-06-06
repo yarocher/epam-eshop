@@ -8,18 +8,22 @@ import com.eshop.model.dao.DBException;
 import com.eshop.model.service.OrdersService;
 import com.eshop.model.entity.Order;
 import com.eshop.model.entity.OrderState;
+import com.eshop.model.entity.User;
+import com.eshop.model.entity.Role;
+
+import com.eshop.controller.Attributes;
+import com.eshop.controller.Path;
 
 public class UpdateOrderCommand implements Command {
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		OrdersService service = new OrdersService();
 		try {
-			long id = Long.parseLong(req.getParameter("order_id"));
-			String stateParam = req.getParameter("state");
+			long id = Long.parseLong(req.getParameter(Attributes.ORDER_ID));
+			String stateParam = req.getParameter(Attributes.STATE);
 
 			Order order = service.getOrder(id);
 
-			//todo: validate state
 			OrderState state = order.getState();
 			
 			for (OrderState os: OrderState.values()) if (os.toString().equals(stateParam)) state = os; 
@@ -30,12 +34,16 @@ public class UpdateOrderCommand implements Command {
 
 			service.updateOrder(order);
 
-			return new CommandOutput ("/controller/orders", true);
+			return new CommandOutput (Path.ORDERS, true);
 		}
 		catch (DBException e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("exception", e);
-			return new CommandOutput ("/error.jsp");
+			req.getSession().setAttribute(Attributes.EXCEPTION, e);
+			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
+	}
+	@Override
+	public boolean checkUserRights (User user) {
+		return user != null && user.getRole() == Role.ADMIN;
 	}
 }

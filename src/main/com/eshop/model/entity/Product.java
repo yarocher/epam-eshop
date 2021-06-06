@@ -1,6 +1,7 @@
 package com.eshop.model.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 public class Product implements java.io.Serializable{
 	private long id;
@@ -8,9 +9,9 @@ public class Product implements java.io.Serializable{
 	private String category;
 	private String description;
 	private int amount;
-	private double price = -1;
-	private Date dateCreated;
-	private Date dateModified;
+	private BigDecimal price = new BigDecimal (-1);;
+	private LocalDateTime dateCreated;
+	private LocalDateTime dateModified;
 	private ProductState state;
 
 	public long getId () {return id;};
@@ -18,9 +19,9 @@ public class Product implements java.io.Serializable{
 	public String getCategory() {return category;};
 	public String getDescription () {return description;};
 	public int getAmount () {return amount;};
-	public double getPrice () {return price;};
-	public Date getDateCreated () {return dateCreated;};
-	public Date getDateModified () {return dateModified;};
+	public BigDecimal getPrice () {return price;};
+	public LocalDateTime getDateCreated () {return dateCreated;};
+	public LocalDateTime getDateModified () {return dateModified;};
 	public ProductState getState () {return state;}
 
 	public void setId (long id) {this.id = id;}
@@ -28,13 +29,13 @@ public class Product implements java.io.Serializable{
 	public void setCategory(String category) {this.category = category;}
 	public void setDescription (String description) {this.description = description;}
 	public void setAmount (int amount) {this.amount = amount;}
-	public void setPrice (double price) {this.price = price;}
-	public void setDateCreated (Date date) {this.dateCreated = date;}
-	public void setDateModified (Date date) {this.dateModified = date;}
+	public void setPrice (BigDecimal price) {this.price = price;}
+	public void setDateCreated (LocalDateTime date) {this.dateCreated = date;}
+	public void setDateModified (LocalDateTime date) {this.dateModified = date;}
 	public void setState (ProductState state) {this.state = state;}
 
 	public Product () {}
-	public Product (String name, double price, int amount) {
+	public Product (String name, BigDecimal price, int amount) {
 		setName(name);
 		setPrice(price);
 		setAmount(amount);
@@ -59,7 +60,7 @@ public class Product implements java.io.Serializable{
 		boolean eq = true;
 		if (id != o.id) eq = false;
 		if (amount != o.amount) eq = false;
-		if (price - o.price > Math.abs(0.01))  eq = false;
+		if (!price.equals(o.price)) eq = false;
 		if (description == null ^ o.description == null) eq = false;
 		if (description != null && !description.equals(o.description)) eq = false;
 		if (name == null ^ o.name == null) eq = false;

@@ -1,16 +1,17 @@
 package com.eshop.controller.command;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
-import com.eshop.model.dao.DBException;
-import com.eshop.model.service.OrdersService;
-import com.eshop.model.entity.Order;
+import com.eshop.model.entity.User;
 
 public class IndexCommand implements Command {
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		return new CommandOutput ("", true);
 	}
+	@Override
+	public boolean checkUserRights (User user) {
+		return true; 
+	}
+
 }

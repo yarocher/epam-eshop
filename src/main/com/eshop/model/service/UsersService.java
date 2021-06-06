@@ -16,12 +16,6 @@ public class UsersService {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			dao.create(u);
 		}
-		catch (DBException dbe) {
-			throw dbe;
-		}
-		catch (Exception e) {
-			throw new RuntimeException (e);
-		}	
 	}
 	public User getUser (long id) throws DBException {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
@@ -30,13 +24,6 @@ public class UsersService {
 			u.getOrders().addAll(ordersDao.findUserOrders(u));
 			return u;
 		}
-		catch (DBException dbe) {
-			throw dbe;
-		}
-		catch (Exception e) {
-			throw new RuntimeException (e);
-		}	
-
 	}
 	public User getUser (String login) throws DBException {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
@@ -45,13 +32,6 @@ public class UsersService {
 			u.getOrders().addAll(ordersDao.findUserOrders(u));
 			return u;
 		}
-		catch (DBException dbe) {
-			throw dbe;
-		}
-		catch (Exception e) {
-			throw new RuntimeException (e);
-		}	
-
 	}
 	public List <User> getUsers () throws DBException {
 		try (UsersDao usersDao = daoFactory.createUsersDao();
@@ -60,34 +40,15 @@ public class UsersService {
 			for (User u: users) u.getOrders().addAll(ordersDao.findUserOrders(u));
 			return users;
 		}
-		catch (DBException dbe) {
-			throw dbe;
-		}
-		catch (Exception e) {
-			throw new RuntimeException (e);
-		}	
-
 	}
 	public void updateUser (User u) throws DBException {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			dao.update(u);
 		}
-		catch (DBException dbe) {
-			throw dbe;
-		}
-		catch (Exception e) {
-			throw new RuntimeException (e);
-		}	
 	}
 	public void deleteUser (User u) throws DBException {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			dao.delete(u);
 		}
-		catch (DBException dbe) {
-			throw dbe;
-		}
-		catch (Exception e) {
-			throw new RuntimeException (e);
-		}	
 	}
 }

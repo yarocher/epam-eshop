@@ -18,21 +18,21 @@
 		<url-pattern>/controller/*</url-pattern>
 	</servlet-mapping>
 	<filter>
-		<filter-name>localization</filter-name>
-		<filter-class>com.eshop.controller.filter.LocalizationFilter</filter-class>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>localization</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter>
 		<filter-name>auth</filter-name>
 		<filter-class>com.eshop.controller.filter.AuthFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
 		<filter-name>auth</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>localization</filter-name>
+		<filter-class>com.eshop.controller.filter.LocalizationFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>localization</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<servlet>
@@ -81,8 +81,11 @@
 		<error-code>404</error-code>
 		<location>/404.jsp</location>
 	</error-page>
+	<error-page>
+		<location>/general-error.jsp</location>
+	</error-page>
 	<context-param>
 		<param-name>pagePortion</param-name>
-		<param-value>2</param-value>
+		<param-value>5</param-value>
 	</context-param>
 </web-app>

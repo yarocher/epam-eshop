@@ -1,4 +1,4 @@
-package com.eshop.controller.command;
+package com.eshop.controller;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -18,10 +18,6 @@ public class Pages <E> {
 			.skip((num - 1) * portion)
 			.limit(portion)
 			.collect(Collectors.toList());
-		System.out.println(num);
-		System.out.println(portion);
-		System.out.println(page);
-		System.out.println(getAll());
 		return page;
 	}
 	public void setPortion (int portion) {this.portion = portion;}

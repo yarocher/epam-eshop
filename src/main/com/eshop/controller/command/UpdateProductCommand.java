@@ -2,6 +2,7 @@
 package com.eshop.controller.command;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,29 +10,33 @@ import com.eshop.model.dao.DBException;
 import com.eshop.model.service.ProductsService;
 import com.eshop.model.entity.Product;
 import com.eshop.model.entity.ProductState;
+import com.eshop.model.entity.User;
+import com.eshop.model.entity.Role;
+
+import com.eshop.controller.Attributes;
+import com.eshop.controller.Path;
 
 public class UpdateProductCommand implements Command {
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
 		try {
-			long id = Long.parseLong(req.getParameter("product_id"));
+			long id = Long.parseLong(req.getParameter(Attributes.PRODUCT_ID));
 			Product product = service.getProduct(id);
-			String name = req.getParameter("name");
-			String category = req.getParameter("category");
-			String description = req.getParameter("description");
-			String stateParam = req.getParameter("state");
-			double price;
+			String name = req.getParameter(Attributes.NAME);
+			String category = req.getParameter(Attributes.CATEGORY);
+			String description = req.getParameter(Attributes.DESCRIPTION);
+			String stateParam = req.getParameter(Attributes.STATE);
+			BigDecimal price;
 			int amount;
 			try {
-				price = Double.parseDouble(req.getParameter("price"));
-				amount = Integer.parseInt(req.getParameter("amount"));
+				price = new BigDecimal(req.getParameter(Attributes.PRICE));
+				amount = Integer.parseInt(req.getParameter(Attributes.AMOUNT));
 			}
 			catch (NumberFormatException | NullPointerException e) {
 				throw new IllegalArgumentException ("wrong input");
 			}
-			//
-			//todo: validate state
+
 			ProductState state = product.getState();
 			
 			for (ProductState ps: ProductState.values()) if (ps.toString().equals(stateParam)) state = ps; 
@@ -45,12 +50,16 @@ public class UpdateProductCommand implements Command {
 
 			service.updateProduct(product);
 
-			return new CommandOutput ("/controller/products", true);
+			return new CommandOutput (Path.PRODUCTS, true);
 		}
 		catch (IllegalArgumentException | DBException e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("exception", e);
-			return new CommandOutput ("/error.jsp");
+			req.getSession().setAttribute(Attributes.EXCEPTION, e);
+			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
+	}
+	@Override
+	public boolean checkUserRights (User user) {
+		return user != null && user.getRole() == Role.ADMIN;
 	}
 }

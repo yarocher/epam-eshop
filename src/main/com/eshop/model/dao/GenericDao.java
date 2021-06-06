@@ -8,4 +8,5 @@ public interface GenericDao <T> extends AutoCloseable {
 	List <T> findAll () throws DBException;
 	void update (T entity) throws DBException;
 	void delete (T entity) throws DBException;
+	void close ();
 }

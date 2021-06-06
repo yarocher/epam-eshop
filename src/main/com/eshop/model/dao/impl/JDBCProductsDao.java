@@ -16,7 +16,11 @@ import com.eshop.model.dao.SQL;
 import com.eshop.model.dao.mapper.ProductMapper;
 import com.eshop.model.entity.Product;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class JDBCProductsDao implements ProductsDao {
+	Logger logger = Logger.getLogger(JDBCProductsDao.class.getName());
 	Connection connection;
 
 	public JDBCProductsDao (Connection connection) {
@@ -30,7 +34,7 @@ public class JDBCProductsDao implements ProductsDao {
 			stmt.setString(k++, p.getName());
 			stmt.setString(k++, p.getDescription());
 			stmt.setString(k++, Integer.toString(p.getAmount()));
-			stmt.setString(k++, Double.toString(p.getPrice()));
+			stmt.setString(k++, p.getPrice().toString());
 			stmt.setString(k++, p.getCategory());
 			stmt.execute();
 			try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -40,6 +44,7 @@ public class JDBCProductsDao implements ProductsDao {
 			}
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.CREATE_PRODUCT, sqle);
 			throw new DBException (DBException.CREATE_PRODUCT, sqle);
 		}
 	}
@@ -54,6 +59,7 @@ public class JDBCProductsDao implements ProductsDao {
 			}
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_PRODUCT, sqle);
 			throw new DBException (DBException.FIND_PRODUCT, sqle);
 		}
 	}
@@ -71,6 +77,7 @@ public class JDBCProductsDao implements ProductsDao {
 			return products;
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_PRODUCTS, sqle);
 			throw new DBException (DBException.FIND_PRODUCTS, sqle);
 		}
 	}
@@ -79,10 +86,10 @@ public class JDBCProductsDao implements ProductsDao {
 	public List <Product> findByPattern (ProductSearcher pattern) throws DBException {
 		try (PreparedStatement stmt = connection.prepareStatement(pattern.get())) {
 			int k = 1;
-			if (pattern.name() != null) stmt.setString(k++, "%" + pattern.name() + "%");
-			if (pattern.category() != null) stmt.setString(k++, "%" + pattern.category() + "%");
-			if (pattern.priceMax() != -1) stmt.setString(k++, Double.toString(pattern.priceMax()));
-			if (pattern.priceMin() != -1) stmt.setString(k++, Double.toString(pattern.priceMin()));
+			if (pattern.getName() != null) stmt.setString(k++, "%" + pattern.getName() + "%");
+			if (pattern.getCategory() != null) stmt.setString(k++, "%" + pattern.getCategory() + "%");
+			if (pattern.getPriceMax() != null) stmt.setString(k++, pattern.getPriceMax().toString());
+			if (pattern.getPriceMin() != null) stmt.setString(k++, pattern.getPriceMin().toString());
 			try (ResultSet rs = stmt.executeQuery();) {
 				List <Product> products = new ArrayList <> ();
 				ProductMapper mapper = new ProductMapper ();
@@ -94,6 +101,7 @@ public class JDBCProductsDao implements ProductsDao {
 			}
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_PRODUCTS, sqle);
 			throw new DBException (DBException.FIND_PRODUCTS, sqle);
 		}
 	}
@@ -105,13 +113,14 @@ public class JDBCProductsDao implements ProductsDao {
 			stmt.setString(k++, p.getName());
 			stmt.setString(k++, p.getDescription());
 			stmt.setString(k++, Integer.toString(p.getAmount()));
-			stmt.setString(k++, Double.toString(p.getPrice()));
+			stmt.setString(k++, p.getPrice().toString());
 			stmt.setString(k++, p.getState().toString());
 			stmt.setString(k++, p.getCategory());
 			stmt.setString(k++, Long.toString(p.getId()));
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.UPDATE_PRODUCT, sqle);
 			throw new DBException (DBException.UPDATE_PRODUCT, sqle);
 		}
 	}
@@ -123,6 +132,7 @@ public class JDBCProductsDao implements ProductsDao {
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.DELETE_PRODUCT, sqle);
 			throw new DBException (DBException.DELETE_PRODUCT, sqle);
 		}
 
@@ -134,7 +144,7 @@ public class JDBCProductsDao implements ProductsDao {
 			connection.close();
 		}
 		catch (Exception e) {
-			//log
+			logger.log(Level.WARNING, DBException.CLOSE_CONNECTION, e);
 		}
 	}
 }

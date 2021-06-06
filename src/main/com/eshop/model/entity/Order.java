@@ -2,14 +2,14 @@ package com.eshop.model.entity;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Order implements java.io.Serializable {
 	private long id;
 	private Map <Product, Integer> items;
 	private OrderState state;
-	private Date dateCreated;
-	private Date dateModified;
+	private LocalDateTime dateCreated;
+	private LocalDateTime dateModified;
 	private User user;
 
 	public long getId () {return id;}
@@ -18,14 +18,14 @@ public class Order implements java.io.Serializable {
 		return items;
 	}
 	public OrderState getState () {return state;}
-	public Date getDateCreated () {return dateCreated;};
-	public Date getDateModified () {return dateModified;};
+	public LocalDateTime getDateCreated () {return dateCreated;};
+	public LocalDateTime getDateModified () {return dateModified;};
 	public User getUser () {return user;};
 
 	public void setId (long id) {this.id = id;}
 	public void setState (OrderState state) {this.state = state;}
-	public void setDateCreated (Date date) {this.dateCreated = date;}
-	public void setDateModified (Date date) {this.dateModified = date;}
+	public void setDateCreated (LocalDateTime date) {this.dateCreated = date;}
+	public void setDateModified (LocalDateTime date) {this.dateModified = date;}
 	public void setUser (User user) {this.user = user;}
 
 	@Override

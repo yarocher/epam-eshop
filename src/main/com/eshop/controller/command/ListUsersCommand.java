@@ -4,9 +4,15 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.eshop.controller.Pages;
+
 import com.eshop.model.dao.DBException;
 import com.eshop.model.service.UsersService;
 import com.eshop.model.entity.User;
+import com.eshop.model.entity.Role;
+
+import com.eshop.controller.Attributes;
+import com.eshop.controller.Path;
 
 public class ListUsersCommand implements Command {
 	@Override
@@ -15,24 +21,28 @@ public class ListUsersCommand implements Command {
 		try {
 			List <User> users = service.getUsers();
 
-			Pages <User> pages = new Pages <> (Integer.parseInt(req.getServletContext().getInitParameter("pagePortion")));
+			Pages <User> pages = new Pages <> (Integer.parseInt(req.getServletContext().getInitParameter(Attributes.PAGE_PORTION)));
 			pages.getAll().addAll(users);
 
 			int pageNum;
 			try {
-				pageNum = Integer.parseInt(req.getParameter("page"));
+				pageNum = Integer.parseInt(req.getParameter(Attributes.PAGE));
 			}
 			catch (NumberFormatException | NullPointerException e) {
 				pageNum = 1;
 			}
 
-			req.getServletContext().setAttribute("users", pages.getPage(pageNum));
-			return new CommandOutput ("/users.jsp");
+			req.getServletContext().setAttribute(Attributes.USERS, pages.getPage(pageNum));
+			return new CommandOutput (Path.USERS_PAGE);
 		}
 		catch (DBException e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("exception", e);
-			return new CommandOutput ("/error.jsp");
+			req.getSession().setAttribute(Attributes.EXCEPTION, e);
+			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
+	}
+	@Override
+	public boolean checkUserRights (User user) {
+		return user != null && user.getRole() == Role.ADMIN;
 	}
 }

@@ -11,27 +11,28 @@ import javax.servlet.http.HttpSessionEvent;
 import com.eshop.model.entity.Product;
 import com.eshop.model.entity.User;
 
+import com.eshop.controller.Attributes;
+
 public class SessionListener implements HttpSessionListener {
+
 	@Override
 	public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-		System.out.println("SESSION WAS CREATED");
 		HttpSession session = httpSessionEvent.getSession();
 		Map <Product, Integer> items = new HashMap <> ();
-		session.setAttribute("cart", items); 
+		session.setAttribute(Attributes.CART, items); 
 	}
 
 	@Override
 	public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
-		System.out.println("SESSION WAS DESTROYED");
 		HttpSession session = httpSessionEvent.getSession();
-		User user = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute(Attributes.USER);
+
 		@SuppressWarnings("unchecked")
-		List <User> loggedUsers = (List <User>) session.getServletContext().getAttribute("logged-users");
+		List <User> loggedUsers = (List <User>) session.getServletContext().getAttribute(Attributes.LOGGED_USERS);
 
 		if (loggedUsers != null) {
 			loggedUsers.remove(user);
-			session.getServletContext().setAttribute("logged-users", loggedUsers);
+			session.getServletContext().setAttribute(Attributes.LOGGED_USERS, loggedUsers);
 		}
-
 	}
 }

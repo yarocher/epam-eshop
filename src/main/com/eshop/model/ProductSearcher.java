@@ -1,6 +1,6 @@
 package com.eshop.model;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -8,15 +8,15 @@ import com.eshop.model.dao.SQL;
 
 public class ProductSearcher {
 	private String name;
-	private double priceMax = -1;
-	private double priceMin = -1;
+	private BigDecimal priceMax;
+	private BigDecimal priceMin;
 	private String sorter;
 	private String category;
 
-	public String name () {return name;}
-	public String category () {return category;}
-	public double priceMax () {return priceMax;}
-	public double priceMin () {return priceMin;}
+	public String getName () {return name;}
+	public String getCategory () {return category;}
+	public BigDecimal getPriceMax () {return priceMax;}
+	public BigDecimal getPriceMin () {return priceMin;}
 
 	public ProductSearcher addName (String name) {
 		this.name = name;	
@@ -28,12 +28,12 @@ public class ProductSearcher {
 		return this;
 	}
 
-	public ProductSearcher addPriceMax (double priceMax) {
+	public ProductSearcher addPriceMax (BigDecimal priceMax) {
 		this.priceMax = priceMax;	
 		return this;
 	}
 
-	public ProductSearcher addPriceMin (double priceMin) {
+	public ProductSearcher addPriceMin (BigDecimal priceMin) {
 		this.priceMin = priceMin;	
 		return this;
 	}
@@ -54,7 +54,7 @@ public class ProductSearcher {
 	public String get () {
 		StringBuilder sb = new StringBuilder (SQL.SELECT_ALL_PRODUCTS);
 		boolean more = false;
-		if (name != null || category != null || priceMax != -1 || priceMin != -1 ) sb.append(SQL.FILTER); 
+		if (name != null || category != null || priceMax != null || priceMin != null ) sb.append(SQL.FILTER); 
 		if (name != null) {
 			sb.append(more ? SQL.AND : "");
 			sb.append(SQL.NAME_FILTER);
@@ -65,12 +65,12 @@ public class ProductSearcher {
 			sb.append(SQL.CATEGORY_FILTER);
 			more = true;
 		}
-		if (priceMax != -1) {
+		if (priceMax != null) {
 			sb.append(more ? SQL.AND : "");
 			sb.append(SQL.PRICE_MAX_FILTER);
 			more = true;
 		}
-		if (priceMin != -1) {
+		if (priceMin != null) {
 			sb.append(more ? SQL.AND : "");
 			sb.append(SQL.PRICE_MIN_FILTER);
 			more = true;

@@ -7,8 +7,13 @@ import javax.servlet.http.HttpSession;
 
 import com.eshop.model.service.ProductsService;
 import com.eshop.model.entity.Product;
+import com.eshop.model.entity.User;
+import com.eshop.model.entity.Role;
 
 import com.eshop.model.dao.DBException;
+
+import com.eshop.controller.Attributes;
+import com.eshop.controller.Path;
 
 public class AddItemCommand implements Command {
 	@Override
@@ -16,8 +21,8 @@ public class AddItemCommand implements Command {
 		try {
 			HttpSession session = req.getSession();
 			@SuppressWarnings("unchecked")
-			Map <Product, Integer>  items  = (Map <Product, Integer>) session.getAttribute("cart");
-			long productId = Long.parseLong(req.getParameter("product_id"));
+			Map <Product, Integer>  items  = (Map <Product, Integer>) session.getAttribute(Attributes.CART);
+			long productId = Long.parseLong(req.getParameter(Attributes.PRODUCT_ID));
 
 			Product product = new ProductsService().getProduct(productId);
 
@@ -27,12 +32,16 @@ public class AddItemCommand implements Command {
 			}
 			else items.put(product, 1);
 			
-			return new CommandOutput ("/controller/products", true);
+			return new CommandOutput (Path.PRODUCTS, true);
 		}
 		catch (DBException e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("exception", e);
-			return new CommandOutput ("/error.jsp");
+			req.getSession().setAttribute(Attributes.EXCEPTION, e);
+			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
+	}
+	@Override
+	public boolean checkUserRights (User user) {
+		return user == null || user.getRole() == Role.CUSTOMER;
 	}
 }

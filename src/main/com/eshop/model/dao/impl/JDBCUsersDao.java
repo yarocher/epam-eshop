@@ -17,7 +17,11 @@ import com.eshop.model.dao.mapper.OrderMapper;
 import com.eshop.model.entity.User;
 import com.eshop.model.entity.Order;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class JDBCUsersDao implements UsersDao {
+	Logger logger = Logger.getLogger(JDBCUsersDao.class.getName());
 	Connection connection;
 
 	public JDBCUsersDao (Connection connection) {
@@ -58,6 +62,7 @@ public class JDBCUsersDao implements UsersDao {
 			}
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_USER, sqle);
 			throw new DBException (DBException.FIND_USER, sqle);
 		}
 	}
@@ -75,6 +80,7 @@ public class JDBCUsersDao implements UsersDao {
 			}
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_USER, sqle);
 			throw new DBException (DBException.FIND_USER, sqle);
 		}
 	}
@@ -92,6 +98,7 @@ public class JDBCUsersDao implements UsersDao {
 			return users;
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_USERS, sqle);
 			throw new DBException (DBException.FIND_USERS, sqle);
 		}
 	}
@@ -108,6 +115,7 @@ public class JDBCUsersDao implements UsersDao {
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.UPDATE_USER, sqle);
 			throw new DBException (DBException.UPDATE_USER, sqle);
 		}
 	}
@@ -119,6 +127,7 @@ public class JDBCUsersDao implements UsersDao {
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.DELETE_USER, sqle);
 			throw new DBException (DBException.DELETE_USER, sqle);
 		}
 	}
@@ -129,7 +138,7 @@ public class JDBCUsersDao implements UsersDao {
 			connection.close();
 		}
 		catch (Exception e) {
-			throw new RuntimeException (e);
+			logger.log(Level.WARNING, DBException.CLOSE_CONNECTION, e);
 		}
 	}
 }

@@ -20,7 +20,11 @@ import com.eshop.model.dao.mapper.OrderMapper;
 import com.eshop.model.dao.mapper.UserMapper;
 import com.eshop.model.dao.mapper.ProductMapper;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class JDBCOrdersDao implements OrdersDao {
+	Logger logger = Logger.getLogger(JDBCOrdersDao.class.getName());
 	Connection connection;
 
 	public JDBCOrdersDao (Connection connection) {
@@ -44,6 +48,7 @@ public class JDBCOrdersDao implements OrdersDao {
 		}
 		catch (SQLException sqle) {
 			rollback();
+			logger.log(Level.WARNING, DBException.CREATE_ORDER, sqle);
 			throw new DBException (DBException.CREATE_ORDER, sqle);
 		}
 		finally {
@@ -60,6 +65,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.INSERT_ORDER_ITEM, sqle);
 			throw new SQLException (DBException.INSERT_ORDER_ITEM, sqle);
 		}
 	}
@@ -71,12 +77,13 @@ public class JDBCOrdersDao implements OrdersDao {
 				while (rs.next()) {
 					ProductMapper mapper = new ProductMapper();
 					Product p = mapper.extractFromResultSet(rs);
-					Integer amount = rs.getInt("item_amount");
+					Integer amount = rs.getInt(SQL.ITEM_AMOUNT);
 					o.getItems().put(p, amount);
 				}
 			}
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.FIND_ORDER_ITEMS, sqle);
 			throw new SQLException (DBException.FIND_ORDER_ITEMS, sqle);
 		}
 	}
@@ -92,7 +99,7 @@ public class JDBCOrdersDao implements OrdersDao {
 				if (rsOrder.next()) {
 					o = new OrderMapper().extractFromResultSet(rsOrder);
 					setOrderItems(o);
-					stmtUser.setString(1, Long.toString(rsOrder.getLong("user_id")));
+					stmtUser.setString(1, Long.toString(rsOrder.getLong(SQL.USER_ID)));
 					try (ResultSet rsUser = stmtUser.executeQuery();) {
 						if (rsUser.next()) {
 							User user = new UserMapper().extractFromResultSet(rsUser);
@@ -109,6 +116,7 @@ public class JDBCOrdersDao implements OrdersDao {
 		}
 		catch (SQLException sqle) {
 			rollback();
+			logger.log(Level.WARNING, DBException.FIND_ORDER, sqle);
 			throw new DBException (DBException.FIND_ORDER, sqle);
 		}
 		finally {
@@ -120,14 +128,14 @@ public class JDBCOrdersDao implements OrdersDao {
 	public List <Order> findAll () throws DBException {
 		List <Order> orders = new ArrayList <> ();
 		try (PreparedStatement stmtOrder = connection.prepareStatement(SQL.SELECT_ALL_ORDERS);
-			ResultSet rsOrder = stmtOrder.executeQuery();
-			PreparedStatement stmtUser = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+				ResultSet rsOrder = stmtOrder.executeQuery();
+				PreparedStatement stmtUser = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
 			connection.setAutoCommit(false);
 			OrderMapper mapper = new OrderMapper ();
 			while (rsOrder.next()) {
 				Order o = new OrderMapper().extractFromResultSet(rsOrder);
 				setOrderItems(o);
-				stmtUser.setString(1, Long.toString(rsOrder.getLong("user_id")));
+				stmtUser.setString(1, Long.toString(rsOrder.getLong(SQL.USER_ID)));
 				try (ResultSet rsUser = stmtUser.executeQuery()) {
 					if (rsUser.next()) {
 						User user = new UserMapper().extractFromResultSet(rsUser);
@@ -143,6 +151,7 @@ public class JDBCOrdersDao implements OrdersDao {
 		}
 		catch (SQLException sqle) {
 			rollback();
+			logger.log(Level.WARNING, DBException.FIND_ORDERS, sqle);
 			throw new DBException (DBException.FIND_ORDERS, sqle);
 		}
 		finally {
@@ -162,7 +171,7 @@ public class JDBCOrdersDao implements OrdersDao {
 				while (rsOrder.next()) {
 					Order o = new OrderMapper().extractFromResultSet(rsOrder);
 					setOrderItems(o);
-					stmtUser.setString(1, Long.toString(rsOrder.getLong("user_id")));
+					stmtUser.setString(1, Long.toString(rsOrder.getLong(SQL.USER_ID)));
 					try (ResultSet rsUser = stmtUser.executeQuery();) {
 						if (rsUser.next()) {
 							User user = new UserMapper().extractFromResultSet(rsUser);
@@ -179,6 +188,7 @@ public class JDBCOrdersDao implements OrdersDao {
 		}
 		catch (SQLException sqle) {
 			rollback();
+			logger.log(Level.WARNING, DBException.FIND_USER_ORDERS, sqle);
 			throw new DBException (DBException.FIND_USER_ORDERS, sqle);
 		}
 		finally {
@@ -195,6 +205,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.UPDATE_ORDER, sqle);
 			throw new DBException (DBException.UPDATE_ORDER, sqle);
 		}
 
@@ -207,6 +218,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			stmt.execute();
 		}
 		catch (SQLException sqle) {
+			logger.log(Level.WARNING, DBException.DELETE_ORDER, sqle);
 			throw new DBException (DBException.DELETE_ORDER, sqle);
 		}
 
@@ -218,7 +230,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			connection.close();
 		}
 		catch (Exception e) {
-			throw new RuntimeException (e);
+			logger.log(Level.WARNING, DBException.CLOSE_CONNECTION, e);
 		}
 	}
 
@@ -227,7 +239,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			connection.rollback();
 		}
 		catch (SQLException sqle) {
-			//log
+			logger.log(Level.WARNING, DBException.ROLLBACK, sqle);
 		}
 	}
 
@@ -236,7 +248,7 @@ public class JDBCOrdersDao implements OrdersDao {
 			connection.setAutoCommit(true);
 		}
 		catch (SQLException sqle) {
-			//log
+			logger.log(Level.WARNING, DBException.RESET_AUTOCOMMIT, sqle);
 		}
 	}
 }

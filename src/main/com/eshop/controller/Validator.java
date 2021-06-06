@@ -1,4 +1,4 @@
-package com.eshop.controller.command;
+package com.eshop.controller;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -10,15 +10,18 @@ import com.eshop.model.entity.User;
 public class Validator {
 	private static Pattern loginPattern = Pattern.compile("\\w*@[a-z]*\\.[a-z]*");
 	private static Pattern passwordPattern = Pattern.compile("\\w{8,}");
+	
+	private static final String WRONG_PASSWORD = "Wrong password!";
+	private static final String WRONG_LOGIN = "Wrong login!";
 
 	public static void validateUser(HttpServletRequest req, User user) throws AuthorizationException {
-		if (!user.getLogin().equals(req.getParameter("login")))  throw new AuthorizationException ("Wrong login!");
-		if (!user.getPassword().equals(req.getParameter("password"))) throw new AuthorizationException ("Wrong password!");
+		if (!user.getLogin().equals(req.getParameter(Attributes.LOGIN)))  throw new AuthorizationException (WRONG_LOGIN);
+		if (!user.getPassword().equals(req.getParameter(Attributes.PASSWORD))) throw new AuthorizationException (WRONG_PASSWORD);
 	}	
 	public static void validateLogin(String login) throws AuthorizationException {
-		if (!loginPattern.matcher(login).matches()) throw new AuthorizationException ("Not valid login!");
+		if (!loginPattern.matcher(login).matches()) throw new AuthorizationException (WRONG_LOGIN);
 	}	
 	public static void validatePassword(String password) throws AuthorizationException {
-		if (!passwordPattern.matcher(password).matches()) throw new AuthorizationException ("Not valid password!");
+		if (!passwordPattern.matcher(password).matches()) throw new AuthorizationException (WRONG_PASSWORD);
 	}	
 }

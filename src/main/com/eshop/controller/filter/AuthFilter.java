@@ -17,6 +17,9 @@ import com.eshop.controller.command.CommandContainer;
 import com.eshop.model.entity.User;
 import com.eshop.model.entity.Role;
 
+import com.eshop.controller.Path;
+import com.eshop.controller.Attributes;
+
 public class AuthFilter implements Filter {
 	@Override
 	public void init (FilterConfig config) {
@@ -26,18 +29,12 @@ public class AuthFilter implements Filter {
 	public void doFilter (ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		User user = (User) req.getSession().getAttribute("user");
+		User user = (User) req.getSession().getAttribute(Attributes.USER);
 		String uri = req.getRequestURI();
-		String commandName = uri.contains("controller") ? uri.replaceAll("/eshop/controller/", "") : uri.replaceAll("/eshop/", "");
-		System.out.println(commandName);
+		String commandName = uri.contains(Path.CONTROLLER) ? uri.replaceAll(req.getContextPath() + Path.CONTROLLER + "/", "") : uri.replaceAll(req.getContextPath() + "/", "");
 		Command command = CommandContainer.get(commandName);
 
-		System.out.println("user " + user + "is trying to do " + commandName);
-
-		if (user == null && !CommandContainer.isGuestCommand(command)
-			|| user != null && user.getRole() == Role.CUSTOMER && !CommandContainer.isCustomerCommand(command)
-			|| user != null && user.getRole() == Role.ADMIN && !CommandContainer.isAdminCommand(command)) res.sendError(HttpServletResponse.SC_FORBIDDEN);
-
+		if (!command.checkUserRights(user)) res.sendError(HttpServletResponse.SC_FORBIDDEN);
 		else chain.doFilter(request, response);
 	}
 	@Override

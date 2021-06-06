@@ -13,9 +13,20 @@ public class CommandOutput {
 		setPage(page);
 	}
 
-	public String getPage() {return page;}
-	public boolean forRedirect () {return redirect;}
+	public String getPage() {
+		return page;
+	}
 
-	public void setPage (String page) {this.page = page;}
-	public void setRedirect (boolean redirect) {this.redirect = redirect;}
+	public boolean forRedirect () {
+		return redirect;
+	}
+
+	public void setPage (String page) {
+		this.page = page;
+	}
+
+	public void setRedirect (boolean redirect) {
+		this.redirect = redirect;
+	}
+
 }

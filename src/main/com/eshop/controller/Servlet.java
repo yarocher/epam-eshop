@@ -22,10 +22,9 @@ public class Servlet extends HttpServlet {
 	}
 
 	public void processRequest (HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String commandName = req.getRequestURI().replaceAll("/eshop/controller/", "");
-		System.out.println(commandName);
+		String contextPath = req.getContextPath();
+		String commandName = req.getRequestURI().replaceAll(contextPath + Path.CONTROLLER + "/", "");
 		Command command = CommandContainer.get(commandName);
-		System.out.println(command.getClass());
 
 		CommandOutput output = command.execute(req);
 		String page = output.getPage();

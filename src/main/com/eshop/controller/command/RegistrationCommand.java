@@ -8,17 +8,24 @@ import javax.servlet.http.HttpServletRequest;
 import com.eshop.model.dao.DBException;
 import com.eshop.model.service.UsersService;
 import com.eshop.model.entity.User;
+import com.eshop.model.entity.Role;
 import com.eshop.model.entity.UserState;
+
+import com.eshop.controller.Validator;
+import com.eshop.controller.AuthorizationException;
+
+import com.eshop.controller.Attributes;
+import com.eshop.controller.Path;
 
 public class RegistrationCommand implements Command {
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		UsersService service = new UsersService();
 		try {
-			if (req.getSession().getAttribute("user") != null) throw new AuthorizationException ("already logged in");
+			if (req.getSession().getAttribute(Attributes.USER) != null) throw new AuthorizationException ("already logged in");
 
-			String login = req.getParameter("login");
-			String password = req.getParameter("password");
+			String login = req.getParameter(Attributes.LOGIN);
+			String password = req.getParameter(Attributes.PASSWORD);
 
 			Validator.validateLogin(login);
 			Validator.validatePassword(password);
@@ -27,20 +34,24 @@ public class RegistrationCommand implements Command {
 			user.setState(UserState.ACTIVE);
 			service.createUser(user);
 
-			req.getSession().setAttribute("user", user);
+			req.getSession().setAttribute(Attributes.USER, user);
 
 			@SuppressWarnings("unchecked")
-			List <User> loggedUsers = (List<User>) req.getServletContext().getAttribute("logged-users");
+			List <User> loggedUsers = (List<User>) req.getServletContext().getAttribute(Attributes.LOGGED_USERS);
 			if (loggedUsers == null) loggedUsers = new ArrayList <User> ();
 			loggedUsers.add(user);
-			req.getServletContext().setAttribute("logged-users", loggedUsers);
+			req.getServletContext().setAttribute(Attributes.LOGGED_USERS, loggedUsers);
 
-			return new CommandOutput ("/controller/products", true);
+			return new CommandOutput (Path.PRODUCTS, true);
 		}
 		catch (AuthorizationException | DBException e) {
 			e.printStackTrace();
-			req.getSession().setAttribute("exception", e);
-			return new CommandOutput ("/error.jsp");
+			req.getSession().setAttribute(Attributes.EXCEPTION, e);
+			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
+	}
+	@Override
+	public boolean checkUserRights (User user) {
+		return user == null;
 	}
 }

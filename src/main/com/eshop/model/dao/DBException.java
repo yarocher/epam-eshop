@@ -2,6 +2,9 @@ package com.eshop.model.dao;
 
 public class DBException extends Exception {
 	public static final String GET_CONNECTION = "Can't get connection...";
+	public static final String CLOSE_CONNECTION = "Connection has not been closed";
+	public static final String ROLLBACK = "Can't rollback";
+	public static final String RESET_AUTOCOMMIT = "Can't set autocommit true";
 
 	public static final String CREATE_PRODUCT = "Can't create product...";
 	public static final String FIND_PRODUCT = "Can't find product...";
