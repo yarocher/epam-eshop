@@ -46,7 +46,7 @@
 			<div align="center">
 				<fmt:message key="login"/><c:out value=": ${user.login}"/>
 				<c:if test="${user.state == 'BLOCKED'}">
-					<c:out value="(${user.state})"/>
+					(<fmt:message key="${user.state}"/>)
 				</c:if>
 				<br><fmt:message key="your-orders"/>:
 				<hr>

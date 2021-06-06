@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctm" uri="WEB-INF/tags.tld" %>
 <c:set var="uri" scope="session" value="${pageContext.request.requestURI}"/>
 <c:set var="user" scope="session" value="${sessionScope.user}"/>
 <c:set var="context_path" scope="page" value="${pageContext.request.contextPath}"/>
@@ -87,10 +88,22 @@
 				<div>
 					<form>
 						<c:if test="${page != 1}">
+							<input type="hidden" name="search_by" value="${param.search_by}">
+							<input type="hidden" name="filter" value="${param.filter}">
+							<input type="hidden" name="price_min" value="${param.price_min}">
+							<input type="hidden" name="price_max" value="${param.price_max}">
+							<input type="hidden" name="sort_by" value="${param.sort_by}">
+							<input type="hidden" name="desc" value="${param.desc}">
 							<button name="page" value="${page - 1}" style="background: #92d6fb; border-radius: 15px;"><fmt:message key="prev"/></button>	
 						</c:if>
 					</form>
 					<form>
+						<input type="hidden" name="search_by" value="${param.search_by}">
+						<input type="hidden" name="filter" value="${param.filter}">
+						<input type="hidden" name="price_min" value="${param.price_min}">
+						<input type="hidden" name="price_max" value="${param.price_max}">
+						<input type="hidden" name="sort_by" value="${param.sort_by}">
+						<input type="hidden" name="desc" value="${param.desc}">
 						<button name="page" value="${page + 1}" style="background: #92d6fb; border-radius: 15px;"><fmt:message key="next"/></button>	
 					</form>
 				</div>
@@ -108,8 +121,8 @@
 						<fmt:message key="price"/><c:out value=": ${product.price}"/><br>
 						<fmt:message key="amount"/><c:out value=": ${product.amount}"/><br>
 
-						<c:set var="date" value="${product.dateModified}"/>
-						<fmt:message key="date-modified"/><c:out value=": ${date.month} ${date.dayOfMonth} ${date.year}"/><br>
+						<fmt:message key="date-modified"/>: <ctm:date date="${product.dateModified}"/><br>
+
 
 							<form align="center" action="${context_path}/edit-product">
 								<button name="product_id" value="${product.id}" style="background: #fffb00; font-size: 15px; border-radius: 15px;"><fmt:message key="edit"/></button>
@@ -139,6 +152,7 @@
 								<input type="hidden" name="price_min" value="${param.price_min}">
 								<input type="hidden" name="price_max" value="${param.price_max}">
 								<input type="hidden" name="sort_by" value="${param.sort_by}">
+								<input type="hidden" name="desc" value="${param.desc}">
 								<input type="hidden" name="page" value="${param.page}">
 								<input type="submit" value="<fmt:message key="add"/>" style="background: #c9ecff; font-size: 15px; border-radius: 15px;">
 							</form>

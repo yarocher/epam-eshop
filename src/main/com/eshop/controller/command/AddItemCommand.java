@@ -42,6 +42,7 @@ public class AddItemCommand implements Command {
 					"&" + Attributes.PRICE_MIN + "=" + req.getParameter(Attributes.PRICE_MIN) + 
 					"&" + Attributes.PRICE_MAX + "=" + req.getParameter(Attributes.PRICE_MAX) +
 					"&" + Attributes.SORT_BY + "=" + req.getParameter(Attributes.SORT_BY) + 
+					"&" + Attributes.DESC + "=" + req.getParameter(Attributes.DESC) + 
 					"&" + Attributes.PAGE + "=" + req.getParameter(Attributes.PAGE) + 
 					"#" + Attributes.ELEMENTS;
 

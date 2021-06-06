@@ -34,7 +34,7 @@ public class MakeOrderCommand implements Command {
 			user = new UsersService().getUser(user.getId());
 			session.setAttribute(Attributes.USER, user);
 
-			if (user.getState() == UserState.BLOCKED) return new CommandOutput (Path.ERROR_404_PAGE); 
+			if (user.getState() == UserState.BLOCKED) return new CommandOutput (Path.ERROR_403_PAGE); 
 
 			Order order = new Order ();
 			order.getItems().putAll(items);

@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctm" uri="WEB-INF/tags.tld" %>
 <c:set var="uri" scope="session" value="${pageContext.request.requestURI}"/>
 <c:set var="user" scope="session" value="${sessionScope.user}"/>
 <c:set var="context_path" scope="page" value="${pageContext.request.contextPath}"/>
@@ -58,10 +59,8 @@
 				<c:forEach items="${applicationScope.orders}" var="order">
 					<p>
 						<strong><fmt:message key="order"/><c:out value=" #${order.id}"/> (<fmt:message key="${order.state}"/>)</strong><br>
-						<c:set var="dateCreated" value="${order.dateCreated}"/>
-						<c:set var="dateModified" value="${order.dateModified}"/>
-						<fmt:message key="date-created"/><c:out value=": ${dateCreated.month} ${dateCreated.dayOfMonth} ${dateCreated.year}"/><br>
-						<fmt:message key="date-modified"/><c:out value=": ${dateModified.month} ${dateModified.dayOfMonth} ${dateModified.year}"/><br>
+						<fmt:message key="date-created"/>: <ctm:date date="${order.dateCreated}"/><br>
+						<fmt:message key="date-modified"/>: <ctm:date date="${order.dateModified}"/><br>
 
 					</p>
 						<form action="${context_path}/controller/update-order" method="POST">
