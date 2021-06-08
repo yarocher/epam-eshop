@@ -1,5 +1,5 @@
 # Eshop
-Final project for Java Spring 2021 Program in EPAM
+E-commerce project (training)
 
 ## Data Base 
 In package *sql* you can find all necessary .sql scripts for project:
