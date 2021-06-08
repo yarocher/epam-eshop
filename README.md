@@ -1,4 +1,4 @@
-# уshop
+# Eshop
 Final project for Java Spring 2021 Program in EPAM
 
 ## Data Base 
