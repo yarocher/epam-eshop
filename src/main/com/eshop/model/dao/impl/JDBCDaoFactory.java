@@ -11,6 +11,7 @@ import com.eshop.model.dao.OrdersDao;
 import com.eshop.model.dao.ProductsDao;
 
 public class JDBCDaoFactory extends DaoFactory {
+
 	private ConnectionPoolHolder pool = ConnectionPoolHolder.getInstance();
 
 	private Connection getConnection () throws DBException{
@@ -21,16 +22,20 @@ public class JDBCDaoFactory extends DaoFactory {
 			throw new DBException (DBException.GET_CONNECTION, sqle);
 		}
 	}
+
 	@Override
 	public UsersDao createUsersDao () throws DBException {
 		return new JDBCUsersDao(getConnection());	
 	}
+	
 	@Override
 	public OrdersDao createOrdersDao () throws DBException {
 		return new JDBCOrdersDao(getConnection());	
 	}
+	
 	@Override
 	public ProductsDao createProductsDao () throws DBException {
 		return new JDBCProductsDao(getConnection());	
 	}
+	
 }

@@ -16,19 +16,21 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.eshop.model.ProductSearcher;
-import com.eshop.model.Sorter;
 import com.eshop.model.entity.*;
 import com.eshop.model.dao.DaoFactory;
 import com.eshop.model.dao.ProductsDao;
 
+import com.eshop.model.dao.SQL;
+
+import java.math.BigDecimal;
+
 public class ProductsDAOTest {
-	private static String testURL;
+
 	private static DaoFactory daoFactory;
 	private Product [] testProducts;
 
 	@BeforeClass
 	public static void initFactory () {
-		testURL = "jdbc:h2:~/eshop-test-db;user=login;password=password;";
 		daoFactory = DaoFactory.getInstance();
 	}
 
@@ -36,9 +38,10 @@ public class ProductsDAOTest {
 	public void setUp () throws FileNotFoundException, SQLException {
 		testProducts = TestData.products();
 
-		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-reset.sql"));
-		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-fill-init.sql"));
+		RunScript.execute(DriverManager.getConnection(TestData.TEST_DB_URL), new FileReader ("sql/db-reset.sql"));
+		RunScript.execute(DriverManager.getConnection(TestData.TEST_DB_URL), new FileReader ("sql/db-fill-init-test.sql"));
 	}
+
 	@Test
 	public void shouldCreateProduct () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
@@ -48,6 +51,7 @@ public class ProductsDAOTest {
 			assertEquals(p, created);
 		}
 	}
+
 	@Test
 	public void shouldFindProductById () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
@@ -55,6 +59,7 @@ public class ProductsDAOTest {
 			assertEquals(testProducts[0], p);
 		}
 	}
+
 	@Test
 	public void shouldFindAllProducts () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
@@ -65,22 +70,24 @@ public class ProductsDAOTest {
 			assertEquals(testProducts[2], products.get(2));
 		}
 	}
+	
 	@Test
 	public void shouldFindByPattern () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			ProductSearcher pattern = new ProductSearcher();
 			pattern
 				.addCategory("cups")
-				.sortBy(Sorter.NAME, true);
+				.sortBy(SQL.NAME, true);
 			assertEquals(testProducts[0], dao.findByPattern(pattern).get(1));
 		}
 	}
+
 	@Test
 	public void shouldUpdateProduct () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			Product p = dao.findById(2);
 			p.setName("name1");
-			p.setPrice(11.11);
+			p.setPrice(new BigDecimal (11.11).setScale(2, BigDecimal.ROUND_HALF_UP));
 			p.setAmount(999);
 			p.setState(ProductState.ON_SALE);
 			dao.update(p);
@@ -91,6 +98,7 @@ public class ProductsDAOTest {
 		}
 
 	}
+
 	@Test
 	public void shouldDeleteProduct () throws Exception {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
@@ -104,4 +112,5 @@ public class ProductsDAOTest {
 		}
 
 	}
+
 }

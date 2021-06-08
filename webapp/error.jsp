@@ -47,7 +47,7 @@
 				</div>
 			</header>
 			<h1><fmt:message key="sorry"/></h1>
-			<c:out value="${sessionScope.exception.message}"/>
+			<fmt:message key="${sessionScope.exception.message}"/>
 		</body>
 	</html>
 </fmt:bundle>

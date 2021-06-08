@@ -18,12 +18,14 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class LocalizationFilter implements Filter {
+
 	Logger logger = Logger.getLogger(LocalizationFilter.class.getName());
 
 	@Override
 	public void init (FilterConfig config) {
 
 	}
+
 	@Override
 	public void doFilter (ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
@@ -31,11 +33,11 @@ public class LocalizationFilter implements Filter {
 		String currentLang = (String) session.getAttribute(Attributes.LANG);
 		String newLang = req.getParameter(Attributes.LANG); 
 
-		//logger.log(Level.INFO, "current lang: " + currentLang + ", new lang: " + newLang);
 		if (newLang != null && !newLang.equals(currentLang)) session.setAttribute(Attributes.LANG, newLang);
 
 		chain.doFilter(request, response);
 	}
+
 	@Override
 	public void destroy () {
 

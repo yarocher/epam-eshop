@@ -14,6 +14,7 @@ import com.eshop.controller.command.CommandContainer;
 import java.util.logging.Logger;
 
 public class Servlet extends HttpServlet {
+
 	Logger logger = Logger.getLogger(Servlet.class.getName());
 
 	@Override

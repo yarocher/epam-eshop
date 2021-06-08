@@ -10,6 +10,7 @@ import com.eshop.model.dao.OrdersDao;
 import com.eshop.model.entity.Order;
 
 public class UsersService {
+
 	DaoFactory daoFactory = DaoFactory.getInstance();
 
 	public void createUser (User u)throws DBException  {
@@ -17,6 +18,7 @@ public class UsersService {
 			dao.create(u);
 		}
 	}
+
 	public User getUser (long id) throws DBException {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
@@ -25,6 +27,7 @@ public class UsersService {
 			return u;
 		}
 	}
+
 	public User getUser (String login) throws DBException {
 		try (UsersDao usersDao = daoFactory.createUsersDao(); 
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
@@ -33,6 +36,7 @@ public class UsersService {
 			return u;
 		}
 	}
+
 	public List <User> getUsers () throws DBException {
 		try (UsersDao usersDao = daoFactory.createUsersDao();
 			OrdersDao ordersDao = daoFactory.createOrdersDao()) {
@@ -41,14 +45,17 @@ public class UsersService {
 			return users;
 		}
 	}
+
 	public void updateUser (User u) throws DBException {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			dao.update(u);
 		}
 	}
+
 	public void deleteUser (User u) throws DBException {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
 			dao.delete(u);
 		}
 	}
+
 }

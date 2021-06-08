@@ -10,6 +10,7 @@ import com.eshop.model.entity.Role;
 import com.eshop.model.dao.SQL;
 
 public class UserMapper implements ObjectMapper <User> {
+
 	@Override
 	public User extractFromResultSet (ResultSet rs) throws SQLException {
 		User u = new User ();
@@ -24,4 +25,5 @@ public class UserMapper implements ObjectMapper <User> {
 		else if (Role.ADMIN.toString().equals(role)) u.setRole(Role.ADMIN);
 		return u;
 	}
+
 }

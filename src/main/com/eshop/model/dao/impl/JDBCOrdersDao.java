@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class JDBCOrdersDao implements OrdersDao {
+
 	Logger logger = Logger.getLogger(JDBCOrdersDao.class.getName());
 	Connection connection;
 
@@ -91,25 +92,16 @@ public class JDBCOrdersDao implements OrdersDao {
 	@Override
 	public Order findById (long id) throws DBException {
 		Order o = null; 
-		try (PreparedStatement stmtOrder = connection.prepareStatement(SQL.SELECT_ORDER_BY_ID);
-				PreparedStatement stmtUser = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_ORDER_BY_ID)) {
 			connection.setAutoCommit(false);
-			stmtOrder.setString(1, Long.toString(id));
-			try (ResultSet rsOrder = stmtOrder.executeQuery()) {
-				if (rsOrder.next()) {
-					o = new OrderMapper().extractFromResultSet(rsOrder);
-					setOrderItems(o);
-					stmtUser.setString(1, Long.toString(rsOrder.getLong(SQL.USER_ID)));
-					try (ResultSet rsUser = stmtUser.executeQuery();) {
-						if (rsUser.next()) {
-							User user = new UserMapper().extractFromResultSet(rsUser);
-							o.setUser(user);
-							user.getOrders().add(o);
-						}
-						else throw new DBException (DBException.USER_NOT_FOUND);
-					}
-				}
-				else throw new DBException (DBException.ORDER_NOT_FOUND);
+			stmt.setString(1, Long.toString(id));
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (!rs.next()) throw new DBException (DBException.ORDER_NOT_FOUND);
+				o = new OrderMapper().extractFromResultSet(rs);
+				setOrderItems(o);
+				User user = findUserById(rs.getLong(SQL.USER_ID));
+				o.setUser(user);
+				user.getOrders().add(o);
 			}
 			connection.commit();
 			return o;
@@ -127,23 +119,16 @@ public class JDBCOrdersDao implements OrdersDao {
 	@Override
 	public List <Order> findAll () throws DBException {
 		List <Order> orders = new ArrayList <> ();
-		try (PreparedStatement stmtOrder = connection.prepareStatement(SQL.SELECT_ALL_ORDERS);
-				ResultSet rsOrder = stmtOrder.executeQuery();
-				PreparedStatement stmtUser = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_ALL_ORDERS);
+				ResultSet rs = stmt.executeQuery()) {
 			connection.setAutoCommit(false);
 			OrderMapper mapper = new OrderMapper ();
-			while (rsOrder.next()) {
-				Order o = new OrderMapper().extractFromResultSet(rsOrder);
+			while (rs.next()) {
+				Order o = new OrderMapper().extractFromResultSet(rs);
 				setOrderItems(o);
-				stmtUser.setString(1, Long.toString(rsOrder.getLong(SQL.USER_ID)));
-				try (ResultSet rsUser = stmtUser.executeQuery()) {
-					if (rsUser.next()) {
-						User user = new UserMapper().extractFromResultSet(rsUser);
-						o.setUser(user);
-						user.getOrders().add(o);
-					}
-					else throw new DBException (DBException.USER_NOT_FOUND);
-				}
+				User user = findUserById(rs.getLong(SQL.USER_ID));
+				o.setUser(user);
+				user.getOrders().add(o);
 				orders.add(o); 
 			}
 			connection.commit();
@@ -162,24 +147,15 @@ public class JDBCOrdersDao implements OrdersDao {
 	@Override
 	public List <Order> findUserOrders (User u) throws DBException {
 		List <Order> orders = new ArrayList <> ();
-		try (PreparedStatement stmtOrder = connection.prepareStatement(SQL.SELECT_USER_ORDERS);
-				PreparedStatement stmtUser = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_USER_ORDERS)) {
 			connection.setAutoCommit(false);
-			stmtOrder.setString(1, Long.toString(u.getId()));
-			try (ResultSet rsOrder = stmtOrder.executeQuery()) {
+			stmt.setString(1, Long.toString(u.getId()));
+			try (ResultSet rs= stmt.executeQuery()) {
 				OrderMapper mapper = new OrderMapper ();
-				while (rsOrder.next()) {
-					Order o = new OrderMapper().extractFromResultSet(rsOrder);
+				while (rs.next()) {
+					Order o = new OrderMapper().extractFromResultSet(rs);
 					setOrderItems(o);
-					stmtUser.setString(1, Long.toString(rsOrder.getLong(SQL.USER_ID)));
-					try (ResultSet rsUser = stmtUser.executeQuery();) {
-						if (rsUser.next()) {
-							User user = new UserMapper().extractFromResultSet(rsUser);
-							o.setUser(user);
-							user.getOrders().add(o);
-						}
-						else throw new DBException (DBException.USER_NOT_FOUND);
-					}
+					o.setUser(u);
 					orders.add(o); 
 				}
 			}
@@ -193,6 +169,16 @@ public class JDBCOrdersDao implements OrdersDao {
 		}
 		finally {
 			setAutoCommitTrue();
+		}
+	}
+
+	private User findUserById (long id) throws DBException, SQLException {
+		try (PreparedStatement stmt = connection.prepareStatement(SQL.SELECT_USER_BY_ID);) {
+			stmt.setString(1, Long.toString(id));
+			try (ResultSet rs = stmt.executeQuery();) {
+				if (rs.next()) return new UserMapper().extractFromResultSet(rs);
+				else throw new DBException (DBException.USER_NOT_FOUND);
+			}
 		}
 	}
 
@@ -251,4 +237,5 @@ public class JDBCOrdersDao implements OrdersDao {
 			logger.log(Level.WARNING, DBException.RESET_AUTOCOMMIT, sqle);
 		}
 	}
+
 }

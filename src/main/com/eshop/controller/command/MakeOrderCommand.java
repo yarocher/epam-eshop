@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class MakeOrderCommand implements Command {
+
 	Logger logger = Logger.getLogger(MakeOrderCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		try {
@@ -52,8 +54,10 @@ public class MakeOrderCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.CUSTOMER;
 	}
+
 }

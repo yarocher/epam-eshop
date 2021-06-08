@@ -1,6 +1,7 @@
 package com.eshop.controller.command;
 
 public class CommandOutput {
+
 	private String page;
 	private boolean redirect;
 

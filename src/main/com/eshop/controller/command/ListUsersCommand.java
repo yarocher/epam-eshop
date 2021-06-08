@@ -18,17 +18,18 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class ListUsersCommand implements Command {
+
 	Logger logger = Logger.getLogger(ListUsersCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		UsersService service = new UsersService();
 		try {
 			List <User> users = service.getUsers();
-
 			Pages <User> pages = new Pages <> (Integer.parseInt(req.getServletContext().getInitParameter(Attributes.PAGE_PORTION)));
 			pages.getAll().addAll(users);
-
 			int pageNum;
+
 			try {
 				pageNum = Integer.parseInt(req.getParameter(Attributes.PAGE));
 			}
@@ -45,8 +46,11 @@ public class ListUsersCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.ADMIN;
 	}
+
 }
+

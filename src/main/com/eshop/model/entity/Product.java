@@ -3,7 +3,8 @@ package com.eshop.model.entity;
 import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
-public class Product implements java.io.Serializable{
+public class Product implements java.io.Serializable {
+
 	private long id;
 	private String name;
 	private String category;
@@ -14,27 +15,80 @@ public class Product implements java.io.Serializable{
 	private LocalDateTime dateModified;
 	private ProductState state;
 
-	public long getId () {return id;};
-	public String getName () {return name;};
-	public String getCategory() {return category;};
-	public String getDescription () {return description;};
-	public int getAmount () {return amount;};
-	public BigDecimal getPrice () {return price;};
-	public LocalDateTime getDateCreated () {return dateCreated;};
-	public LocalDateTime getDateModified () {return dateModified;};
-	public ProductState getState () {return state;}
+	public long getId () {
+		return id;
+	}
 
-	public void setId (long id) {this.id = id;}
-	public void setName (String name) {this.name = name;}
-	public void setCategory(String category) {this.category = category;}
-	public void setDescription (String description) {this.description = description;}
-	public void setAmount (int amount) {this.amount = amount;}
-	public void setPrice (BigDecimal price) {this.price = price;}
-	public void setDateCreated (LocalDateTime date) {this.dateCreated = date;}
-	public void setDateModified (LocalDateTime date) {this.dateModified = date;}
-	public void setState (ProductState state) {this.state = state;}
+	public String getName () {
+		return name;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public String getDescription () {
+		return description;
+	}
+
+	public int getAmount () {
+		return amount;
+	}
+
+	public BigDecimal getPrice () {
+		return price;
+	}
+
+	public LocalDateTime getDateCreated () {
+		return dateCreated;
+	}
+
+	public LocalDateTime getDateModified () {
+		return dateModified;
+	}
+
+	public ProductState getState () {
+		return state;
+	}
+
+	public void setId (long id) {
+		this.id = id;
+	}
+	
+	public void setName (String name) {
+		this.name = name;
+	}
+
+	public void setCategory (String category) {
+		this.category = category;
+	}
+
+	public void setDescription (String description) {
+		this.description = description;
+	}
+
+	public void setAmount (int amount) {
+		this.amount = amount;
+	}
+
+	public void setPrice (BigDecimal price) {
+		this.price = price;
+	}
+
+	public void setDateCreated (LocalDateTime date) {
+		this.dateCreated = date;
+	}
+
+	public void setDateModified (LocalDateTime date) {
+		this.dateModified = date;
+	}
+
+	public void setState (ProductState state) {
+		this.state = state;
+	}
 
 	public Product () {}
+
 	public Product (String name, BigDecimal price, int amount) {
 		setName(name);
 		setPrice(price);

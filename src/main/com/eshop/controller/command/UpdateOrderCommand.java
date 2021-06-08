@@ -18,7 +18,9 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class UpdateOrderCommand implements Command {
+
 	Logger logger = Logger.getLogger(UpdateOrderCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		OrdersService service = new OrdersService();
@@ -29,9 +31,7 @@ public class UpdateOrderCommand implements Command {
 			Order order = service.getOrder(id);
 
 			OrderState state = order.getState();
-			
 			for (OrderState os: OrderState.values()) if (os.toString().equals(stateParam)) state = os; 
-	
 			order.setState(state);
 
 			service.updateOrder(order);
@@ -48,8 +48,10 @@ public class UpdateOrderCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.ADMIN;
 	}
+
 }

@@ -15,7 +15,9 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class DeleteProductCommand implements Command {
+
 	Logger logger = Logger.getLogger(DeleteProductCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
@@ -36,4 +38,5 @@ public class DeleteProductCommand implements Command {
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.ADMIN;
 	}
+
 }

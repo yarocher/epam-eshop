@@ -20,13 +20,12 @@ import com.eshop.model.dao.DaoFactory;
 import com.eshop.model.dao.UsersDao;
 
 public class UsersDAOTest {
-	private static String testURL;
+
 	private static DaoFactory daoFactory;
 	private User [] testUsers;
 
 	@BeforeClass
 	public static void initFactory () {
-		testURL = "jdbc:h2:~/eshop-test-db;user=login;password=password;";
 		daoFactory = DaoFactory.getInstance();
 	}
 
@@ -34,9 +33,10 @@ public class UsersDAOTest {
 	public void setUp () throws FileNotFoundException, SQLException {
 		testUsers = TestData.users();
 
-		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-reset.sql"));
-		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-fill-init.sql"));
+		RunScript.execute(DriverManager.getConnection(TestData.TEST_DB_URL), new FileReader ("sql/db-reset.sql"));
+		RunScript.execute(DriverManager.getConnection(TestData.TEST_DB_URL), new FileReader ("sql/db-fill-init-test.sql"));
 	}
+
 	@Test
 	public void shouldCreateUser () throws Exception{
 		try (UsersDao dao = daoFactory.createUsersDao()) {
@@ -46,6 +46,7 @@ public class UsersDAOTest {
 			assertEquals(testUsers[0], u);
 		}
 	}
+
 	@Test
 	public void shouldFindUserById () throws Exception {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
@@ -53,6 +54,7 @@ public class UsersDAOTest {
 			assertEquals(testUsers[0], u);
 		}
 	}
+
 	@Test
 	public void shouldFindAllUsers () throws Exception {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
@@ -63,6 +65,7 @@ public class UsersDAOTest {
 			assertEquals(testUsers[2], users.get(2));
 		}
 	}
+
 	@Test
 	public void shouldUpdateUser () throws Exception {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
@@ -76,6 +79,7 @@ public class UsersDAOTest {
 			assertEquals(u, updated);
 		}
 	}
+
 	@Test
 	public void shouldDeleteUser () throws Exception {
 		try (UsersDao dao = daoFactory.createUsersDao()) {
@@ -89,4 +93,5 @@ public class UsersDAOTest {
 		}
 
 	}
+
 }

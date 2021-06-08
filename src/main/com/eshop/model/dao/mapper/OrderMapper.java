@@ -11,6 +11,7 @@ import com.eshop.model.entity.OrderState;
 import com.eshop.model.dao.SQL;
 
 public class OrderMapper implements ObjectMapper <Order> {
+
 	@Override
 	public Order extractFromResultSet (ResultSet rs) throws SQLException {
 		LocalDateTime dateCreated = new java.sql.Timestamp(rs.getDate(SQL.DATE_CREATED).getTime()).toLocalDateTime();
@@ -25,4 +26,5 @@ public class OrderMapper implements ObjectMapper <Order> {
 		else if (OrderState.CANCELLED.toString().equals(state)) o.setState(OrderState.CANCELLED);
 		return o;
 	}
+
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class User  implements java.io.Serializable{
+
 	private long id;
 	private String login;
 	private String password;
@@ -12,23 +13,53 @@ public class User  implements java.io.Serializable{
 	private Role role;
 	private List <Order> orders;
 
-	public long getId () {return id;}
-	public String getLogin () {return login;}
-	public String getPassword () {return password;}
-	public UserState getState () {return state;}
-	public Role getRole () {return role; }
+	public long getId () {
+		return id;
+	}
+
+	public String getLogin () {
+		return login;
+	}
+
+	public String getPassword () {
+		return password;
+	}
+
+	public UserState getState () {
+		return state;
+	}
+
+	public Role getRole () {
+		return role;
+	}
+
 	public List <Order> getOrders() {
 		if (orders == null) orders = new ArrayList <> ();
 		return orders;
 	}
 
-	public void setId (long id) {this.id = id;}
-	public void setLogin (String login) {this.login = login;}
-	public void setPassword (String password) {this.password = password;}
-	public void setState (UserState state) {this.state = state;}
-	public void setRole (Role role) {this.role = role;}
+	public void setId (long id) {
+		this.id = id;
+	}
+
+	public void setLogin (String login) {
+		this.login = login;
+	}
+
+	public void setPassword (String password) {
+		this.password = password;
+	}
+
+	public void setState (UserState state) {
+		this.state = state;
+	}
+
+	public void setRole (Role role) {
+		this.role = role;
+	}
 
 	public User () {}
+
 	public User (String login, String password) {
 		setLogin(login);
 		setPassword(password);
@@ -37,7 +68,9 @@ public class User  implements java.io.Serializable{
 
 	@Override
 	public String toString () {
-		return "User" + id + "(" + state + ") {login=" + login + ", password=" + password + ", role=" + role + ", orders=" + getOrders().stream().map(o -> o.getId()).collect(Collectors.toList()) +  "}";
+		return "User" + id + "(" + state + 
+			") {login=" + login + ", password=" + password + ", role=" + role + 
+			", orders=" + getOrders().stream().map(o -> o.getId()).collect(Collectors.toList()) +  "}";
 	}
 
 	@Override
@@ -54,7 +87,6 @@ public class User  implements java.io.Serializable{
 		if (role != null && !role.equals(o.role)) eq = false;
 		if (state == null ^ o.state == null) eq = false;
 		if (state != null && !state.equals(o.state)) eq = false;
-		//if (!getOrders().equals(o.getOrders())) eq = false;
 
 		return eq;
 	}
@@ -63,4 +95,5 @@ public class User  implements java.io.Serializable{
 	public int hashCode () {
 		return (int) id;
 	}
+
 }

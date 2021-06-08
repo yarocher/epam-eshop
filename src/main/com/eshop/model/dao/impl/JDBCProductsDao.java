@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class JDBCProductsDao implements ProductsDao {
+
 	Logger logger = Logger.getLogger(JDBCProductsDao.class.getName());
 	Connection connection;
 
@@ -148,6 +149,7 @@ public class JDBCProductsDao implements ProductsDao {
 			logger.log(Level.WARNING, DBException.CLOSE_CONNECTION, e);
 		}
 	}
+
 }
 
 

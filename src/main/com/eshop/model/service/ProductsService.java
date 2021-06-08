@@ -9,6 +9,7 @@ import com.eshop.model.entity.Product;
 import com.eshop.model.ProductSearcher;
 
 public class ProductsService {
+
 	DaoFactory daoFactory = DaoFactory.getInstance();
 
 	public void createProduct (Product p) throws DBException {
@@ -16,31 +17,37 @@ public class ProductsService {
 			dao.create(p);
 		}
 	}
+
 	public Product getProduct (long id) throws DBException {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			Product p = dao.findById(id);
 			return p;
 		}
 	}
+
 	public List <Product> getProducts () throws DBException {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			return dao.findAll();
 		}
 	}
+
 	public List <Product> searchProducts (ProductSearcher pattern) throws DBException {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			List <Product> products = dao.findByPattern(pattern);
 			return products;
 		}
 	}
+
 	public void updateProduct (Product p) throws DBException {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			dao.update(p);
 		}
 	}
+
 	public void deleteProduct (Product p) throws DBException {
 		try (ProductsDao dao = daoFactory.createProductsDao()) {
 			dao.delete(p);
 		}
 	}
+
 }

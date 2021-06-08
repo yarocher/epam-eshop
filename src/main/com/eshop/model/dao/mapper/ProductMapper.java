@@ -11,6 +11,7 @@ import com.eshop.model.entity.ProductState;
 import com.eshop.model.dao.SQL;
 
 public class ProductMapper implements ObjectMapper <Product> {
+
 	@Override
 	public Product extractFromResultSet (ResultSet rs) throws SQLException {
 		LocalDateTime dateCreated = new java.sql.Timestamp(rs.getDate(SQL.DATE_CREATED).getTime()).toLocalDateTime();
@@ -29,5 +30,6 @@ public class ProductMapper implements ObjectMapper <Product> {
 		else if (ProductState.HIDDEN.toString().equals(state)) p.setState(ProductState.HIDDEN);
 		return p;
 	}
+
 }
 

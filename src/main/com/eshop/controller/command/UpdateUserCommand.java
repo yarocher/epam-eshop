@@ -17,7 +17,9 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class UpdateUserCommand implements Command {
+
 	Logger logger = Logger.getLogger(UpdateUserCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		UsersService service = new UsersService();
@@ -27,13 +29,8 @@ public class UpdateUserCommand implements Command {
 
 			User user = service.getUser(id);
 
-			//todo: validate state
 			UserState state = user.getState();
-			
-			for (UserState os: UserState.values()) if (os.toString().equals(stateParam)) state = os; 
-			System.out.println(stateParam);
-			System.out.println(state);
-	
+			for (UserState us: UserState.values()) if (us.toString().equals(stateParam)) state = us; 
 			user.setState(state);
 
 			service.updateUser(user);
@@ -50,8 +47,10 @@ public class UpdateUserCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.ADMIN;
 	}
+
 }

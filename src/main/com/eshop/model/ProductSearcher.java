@@ -7,16 +7,28 @@ import java.util.HashMap;
 import com.eshop.model.dao.SQL;
 
 public class ProductSearcher {
+
 	private String name;
 	private BigDecimal priceMax;
 	private BigDecimal priceMin;
 	private String sorter;
 	private String category;
 
-	public String getName () {return name;}
-	public String getCategory () {return category;}
-	public BigDecimal getPriceMax () {return priceMax;}
-	public BigDecimal getPriceMin () {return priceMin;}
+	public String getName () {
+		return name;
+	}
+
+	public String getCategory () {
+		return category;
+	}
+
+	public BigDecimal getPriceMax () {
+		return priceMax;
+	}
+
+	public BigDecimal getPriceMin () {
+		return priceMin;
+	}
 
 	public ProductSearcher addName (String name) {
 		this.name = name;	
@@ -47,10 +59,10 @@ public class ProductSearcher {
 		return sortBy(field, false);
 	}
 
-	//name
-	//category
-	//priceMax
-	//priceMin
+	//1) name
+	//2) category
+	//3) priceMax
+	//4) priceMin
 	public String get () {
 		StringBuilder sb = new StringBuilder (SQL.SELECT_ALL_PRODUCTS);
 		boolean more = false;
@@ -77,6 +89,6 @@ public class ProductSearcher {
 		}
 		if (sorter != null) sb.append(sorter);
 		return sb.toString();
-
 	}
+
 }

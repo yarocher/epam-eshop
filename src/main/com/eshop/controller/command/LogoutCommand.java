@@ -20,13 +20,15 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class LogoutCommand implements Command {
+
 	Logger logger = Logger.getLogger(LogoutCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		UsersService service = new UsersService();
 		try {
 			HttpSession session = req.getSession();
-			if (session.getAttribute(Attributes.USER) == null) throw new AuthorizationException ("not logged in yet");
+			if (session.getAttribute(Attributes.USER) == null) throw new AuthorizationException ("not-logged-in-yet");
 
 			session.invalidate();
 
@@ -38,8 +40,10 @@ public class LogoutCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null;
 	}
+
 }

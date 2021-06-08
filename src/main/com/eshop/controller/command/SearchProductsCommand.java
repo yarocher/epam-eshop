@@ -27,6 +27,7 @@ public class SearchProductsCommand implements Command {
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
 		HttpSession session = req.getSession();
+		int x = 1 / 0;
 		int pagePortion = Integer.parseInt(req.getServletContext().getInitParameter(Attributes.PAGE_PORTION)); 
 		try {
 			String searchBy = req.getParameter(Attributes.SEARCH_BY);

@@ -21,24 +21,29 @@ import com.eshop.controller.Path;
 import com.eshop.controller.Attributes;
 
 public class AuthFilter implements Filter {
+
 	@Override
 	public void init (FilterConfig config) {
 
 	}
+
 	@Override
 	public void doFilter (ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		User user = (User) req.getSession().getAttribute(Attributes.USER);
 		String uri = req.getRequestURI();
-		String commandName = uri.contains(Path.CONTROLLER) ? uri.replaceAll(req.getContextPath() + Path.CONTROLLER + "/", "") : uri.replaceAll(req.getContextPath() + "/", "");
+		String commandName = uri.contains(Path.CONTROLLER) ? 
+			uri.replaceAll(req.getContextPath() + Path.CONTROLLER + "/", "") : uri.replaceAll(req.getContextPath() + "/", "");
 		Command command = CommandContainer.get(commandName);
 
 		if (!command.checkUserRights(user)) res.sendError(HttpServletResponse.SC_FORBIDDEN);
 		else chain.doFilter(request, response);
 	}
+
 	@Override
 	public void destroy () {
 
 	}
+
 }

@@ -20,7 +20,9 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class UpdateProductCommand implements Command {
+
 	Logger logger = Logger.getLogger(UpdateProductCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
@@ -33,6 +35,7 @@ public class UpdateProductCommand implements Command {
 			String stateParam = req.getParameter(Attributes.STATE);
 			BigDecimal price;
 			int amount;
+
 			try {
 				price = new BigDecimal(req.getParameter(Attributes.PRICE));
 				amount = Integer.parseInt(req.getParameter(Attributes.AMOUNT));
@@ -42,9 +45,9 @@ public class UpdateProductCommand implements Command {
 			}
 
 			ProductState state = product.getState();
-			
 			for (ProductState ps: ProductState.values()) if (ps.toString().equals(stateParam)) state = ps; 
 			
+			//builder??
 			product.setName(name);
 			product.setCategory(category);
 			product.setDescription(description);
@@ -62,8 +65,10 @@ public class UpdateProductCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.ADMIN;
 	}
+
 }

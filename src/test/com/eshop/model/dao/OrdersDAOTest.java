@@ -20,13 +20,12 @@ import com.eshop.model.dao.DaoFactory;
 import com.eshop.model.dao.OrdersDao;
 
 public class OrdersDAOTest {
-	private static String testURL;
+
 	private static DaoFactory daoFactory;
 	private Order [] testOrders;
 
 	@BeforeClass
 	public static void initFactory () {
-		testURL = "jdbc:h2:~/eshop-test-db;user=login;password=password;";
 		daoFactory = DaoFactory.getInstance();
 	}
 
@@ -40,31 +39,37 @@ public class OrdersDAOTest {
 			testOrders[i].setUser(u);
 		}
 		
-		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-reset.sql"));
-		RunScript.execute(DriverManager.getConnection(testURL), new FileReader ("sql/db-fill-init.sql"));
+		RunScript.execute(DriverManager.getConnection(TestData.TEST_DB_URL), new FileReader ("sql/db-reset.sql"));
+		RunScript.execute(DriverManager.getConnection(TestData.TEST_DB_URL), new FileReader ("sql/db-fill-init-test.sql"));
 	}
+
 	@Test
 	public void shouldCreateOrder () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			testOrders[0].setState(OrderState.NEW);
 			dao.create(testOrders[0]);
 			Order o = dao.findById(4);
+
 			assertEquals(testOrders[0], o);
 		}
 
 	}
+
 	@Test
 	public void shouldFindOrderById () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			Order o = dao.findById(1);
+			
 			assertEquals(testOrders[0], o);
 		}
 
 	}
+
 	@Test
 	public void shouldFindAllOrders () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			List <Order> orders = dao.findAll();
+
 			assertEquals(3, orders.size());
 			assertEquals(testOrders[0], orders.get(0));
 			assertEquals(testOrders[1], orders.get(1));
@@ -72,16 +77,19 @@ public class OrdersDAOTest {
 		}
 
 	}
+	
 	@Test
 	public void shouldFindUserOrders () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
 			List <Order> orders = dao.findUserOrders(TestData.users()[0]);
+
 			assertEquals(2, orders.size());
 			assertTrue(orders.contains(testOrders[0]));
 			assertTrue(orders.contains(testOrders[1]));
 		}
 
 	}
+
 	@Test
 	public void shouldUpdateOrder () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
@@ -95,6 +103,7 @@ public class OrdersDAOTest {
 		}
 
 	}
+
 	@Test
 	public void shouldDeleteOrder () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
@@ -107,6 +116,7 @@ public class OrdersDAOTest {
 			assertEquals(2, orders.size());
 		}
 	}
+
 	@Test
 	public void shouldRollbackIfFail () throws Exception {
 		try (OrdersDao dao = daoFactory.createOrdersDao()) {
@@ -126,4 +136,5 @@ public class OrdersDAOTest {
 			assertEquals(3, dao.findAll().size());
 		}
 	}
+
 }

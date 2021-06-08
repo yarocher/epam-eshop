@@ -2,14 +2,21 @@ package com.eshop.model.dao;
 
 import com.eshop.model.entity.*;
 
+import java.math.BigDecimal;
+
 public class TestData {
+
+	public static final String TEST_DB_URL = "jdbc:h2:~/eshop-test-db;MVCC=TRUE;LOCK_TIMEOUT=30000;user=login;password=password";
+	public static final String TEST_DB_DRIVER = "org.h2.Driver";
+
 	public static Product [] products () {
 		Product p1 = new Product ();
 		p1.setId(1);
 		p1.setName("cup1");
-		p1.setDescription("desc of cup1"); p1.setAmount(324);
+		p1.setDescription("desc of cup1");
+		p1.setAmount(324);
 		p1.setState(ProductState.ON_SALE);
-		p1.setPrice(234.12);
+		p1.setPrice(new BigDecimal (234.120).setScale(2, BigDecimal.ROUND_HALF_UP));
 		p1.setCategory("cups");
 
 		Product p2 = new Product ();
@@ -17,8 +24,8 @@ public class TestData {
 		p2.setName("cup2");
 		p2.setDescription("desc of cup2");
 		p2.setAmount(235);
-		p2.setState(ProductState.HIDDEN);
-		p2.setPrice(224.32);
+		p2.setState(ProductState.ON_SALE);
+		p2.setPrice(new BigDecimal (224.320).setScale(2, BigDecimal.ROUND_HALF_UP));
 		p2.setCategory("cups");
 
 		Product p3 = new Product ();
@@ -27,12 +34,13 @@ public class TestData {
 		p3.setDescription("desc of book1");
 		p3.setAmount(311);
 		p3.setState(ProductState.ON_SALE);
-		p3.setPrice(24.32);
+		p3.setPrice(new BigDecimal (24.320).setScale(2, BigDecimal.ROUND_HALF_UP));
 		p3.setCategory("books");
 
 		return new Product [] {p1, p2, p3};
 
 	}
+
 	public static Order [] orders () {
 		Product [] products = products();
 		Product p1 = products[0];
@@ -60,6 +68,7 @@ public class TestData {
 
 		return new Order [] {o1, o2, o3};
 	}
+
 	public static User [] users () {
 		Order [] orders = orders();
 		Order o1 = orders[0];
@@ -68,8 +77,8 @@ public class TestData {
 
 		User u1 = new User ();
 		u1.setId(1);
-		u1.setLogin("l1");
-		u1.setPassword("p1");
+		u1.setLogin("ivanov123@gmail.com");
+		u1.setPassword("ivanov");
 		u1.setState(UserState.ACTIVE);
 		u1.setRole(Role.CUSTOMER);
 		u1.getOrders().add(o1);
@@ -79,8 +88,8 @@ public class TestData {
 
 		User u2 = new User ();
 		u2.setId(2);
-		u2.setLogin("l2");
-		u2.setPassword("p2");
+		u2.setLogin("petrov44@mail.ru");
+		u2.setPassword("petrov44");
 		u2.setState(UserState.BLOCKED);
 		u2.setRole(Role.CUSTOMER);
 		u2.getOrders().add(o3);
@@ -88,11 +97,12 @@ public class TestData {
 
 		User u3 = new User ();
 		u3.setId(3);
-		u3.setLogin("l3");
-		u3.setPassword("p3");
+		u3.setLogin("admin");
+		u3.setPassword("admin");
 		u3.setState(UserState.ACTIVE);
 		u3.setRole(Role.ADMIN);
 
 		return new User [] {u1, u2, u3};
 	}
+
 }

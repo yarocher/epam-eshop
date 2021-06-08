@@ -24,10 +24,12 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class LoginCommand implements Command {
+
 	Logger logger = Logger.getLogger(LoginCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
-		final String ALREADY_LOGGED_IN = "already logged in";
+		final String ALREADY_LOGGED_IN = "already-logged-in";
 
 		UsersService service = new UsersService();
 		try {
@@ -43,8 +45,8 @@ public class LoginCommand implements Command {
 			if (loggedUsers.contains(user)) throw new AuthorizationException (ALREADY_LOGGED_IN);
 			else loggedUsers.add(user);
 			session.setAttribute(Attributes.USER, user);
-			req.getServletContext().setAttribute(Attributes.LOGGED_USERS, loggedUsers);
 
+			req.getServletContext().setAttribute(Attributes.LOGGED_USERS, loggedUsers);
 			return new CommandOutput ("/", true);
 		}
 		catch (AuthorizationException | DBException e) {
@@ -53,8 +55,10 @@ public class LoginCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user == null;
 	}
+
 }

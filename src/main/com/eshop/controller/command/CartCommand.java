@@ -12,13 +12,17 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class CartCommand implements Command {
+
 	Logger logger = Logger.getLogger(CartCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		return new CommandOutput (Path.CART_PAGE);
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user == null || user.getRole() == Role.CUSTOMER;
 	}
+
 }

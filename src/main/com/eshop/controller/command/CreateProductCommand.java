@@ -21,17 +21,19 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class CreateProductCommand implements Command {
+
 	Logger logger = Logger.getLogger(CreateProductCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		ProductsService service = new ProductsService();
 		try {
-
 			String name = new String (req.getParameter(Attributes.NAME).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 			String category = new String (req.getParameter(Attributes.CATEGORY).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 			String description = new String (req.getParameter(Attributes.DESCRIPTION).getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 			BigDecimal price;
 			int amount;
+
 			try {
 				price = new BigDecimal(req.getParameter(Attributes.PRICE));
 				amount = Integer.parseInt(req.getParameter(Attributes.AMOUNT));
@@ -42,6 +44,7 @@ public class CreateProductCommand implements Command {
 			
 			Product product = new Product ();
 
+			//builder??
 			product.setName(name);
 			product.setCategory(category);
 			product.setDescription(description);
@@ -58,8 +61,10 @@ public class CreateProductCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user != null && user.getRole() == Role.ADMIN;
 	}
+
 }

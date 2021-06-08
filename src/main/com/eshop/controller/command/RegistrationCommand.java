@@ -21,12 +21,14 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class RegistrationCommand implements Command {
+
 	Logger logger = Logger.getLogger(RegistrationCommand.class.getName());
+
 	@Override
 	public CommandOutput execute (HttpServletRequest req) {
 		UsersService service = new UsersService();
 		try {
-			if (req.getSession().getAttribute(Attributes.USER) != null) throw new AuthorizationException ("already logged in");
+			if (req.getSession().getAttribute(Attributes.USER) != null) throw new AuthorizationException ("already-logged-in");
 
 			String login = req.getParameter(Attributes.LOGIN);
 			String password = req.getParameter(Attributes.PASSWORD);
@@ -54,8 +56,10 @@ public class RegistrationCommand implements Command {
 			return new CommandOutput (Path.EXCEPTION_PAGE);
 		}
 	}
+
 	@Override
 	public boolean checkUserRights (User user) {
 		return user == null;
 	}
+
 }

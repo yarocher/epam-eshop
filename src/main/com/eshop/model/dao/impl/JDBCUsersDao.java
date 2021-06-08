@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 public class JDBCUsersDao implements UsersDao {
+
 	Logger logger = Logger.getLogger(JDBCUsersDao.class.getName());
 	Connection connection;
 
@@ -141,4 +142,5 @@ public class JDBCUsersDao implements UsersDao {
 			logger.log(Level.WARNING, DBException.CLOSE_CONNECTION, e);
 		}
 	}
+
 }
